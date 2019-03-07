@@ -3,6 +3,11 @@
 # Product-specific compile-time definitions.
 #
 
+BUILD_BROKEN_ANDROIDMK_EXPORTS :=true
+BUILD_BROKEN_DUP_COPY_HEADERS :=true
+BUILD_BROKEN_DUP_RULES :=true
+BUILD_BROKEN_PHONY_TARGETS :=true
+
 TARGET_BOARD_PLATFORM := sdm660
 TARGET_BOARD_SUFFIX := _64
 TARGET_BOOTLOADER_BOARD_NAME :=sdm660
@@ -97,7 +102,7 @@ TARGET_USES_GRALLOC1 := true
 
 ifeq ($(BOARD_KERNEL_CMDLINE),)
 ifeq ($(TARGET_KERNEL_VERSION),4.4)
-     BOARD_KERNEL_CMDLINE += console=ttyMSM0,115200,n8 androidboot.console=ttyMSM0 earlycon=msm_serial_dm,0xc170000
+     BOARD_KERNEL_CMDLINE += console=ttyMSM0,115200,n8 androidboot.console=ttyMSM0 earlycon=msm_serial_dm,0xc170000 androidboot.selinux=permissive
 else
      BOARD_KERNEL_CMDLINE += console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 earlycon=msm_hsl_uart,0xc1b0000
 endif
@@ -114,7 +119,8 @@ BOARD_RAMDISK_OFFSET     := 0x02000000
 
 TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_HEADER_ARCH := arm64
-TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
+#TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
+TARGET_KERNEL_CROSS_COMPILE_PREFIX := $(shell pwd)/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9/bin/arm-linux-androidkernel-
 TARGET_USES_UNCOMPRESSED_KERNEL := false
 
 MAX_EGL_CACHE_KEY_SIZE := 12*1024
