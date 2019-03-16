@@ -144,3 +144,10 @@ endif
 #ifeq (, $(wildcard vendor/qcom/build/tasks/generate_extra_images.mk))
 include device/qcom/common/generate_extra_images.mk
 #endif
+
+#----------------------------------------------------------------------
+# override default make with prebuilt make path (if any)
+#----------------------------------------------------------------------
+ifneq (, $(wildcard $(shell pwd)/prebuilts/build-tools/linux-x86/bin/make))
+    MAKE := $(shell pwd)/prebuilts/build-tools/linux-x86/bin/$(MAKE)
+endif

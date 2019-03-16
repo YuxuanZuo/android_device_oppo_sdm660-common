@@ -1,4 +1,7 @@
 TARGET_USES_AOSP := true
+ALLOW_MISSING_DEPENDENCIES := true
+
+TARGET_SYSTEM_PROP := device/qcom/sdm660_64/system.prop
 
 DEVICE_PACKAGE_OVERLAYS := device/qcom/sdm660_64/overlay
 
@@ -22,7 +25,7 @@ TARGET_DISABLE_DASH := true
 
 TARGET_KERNEL_VERSION := 4.4
 BOARD_FRP_PARTITION_NAME := frp
-TARGET_USES_NQ_NFC := true
+TARGET_USES_NQ_NFC := false
 
 ifeq ($(TARGET_USES_NQ_NFC),true)
 # Flag to enable and support NQ3XX chipsets
@@ -118,7 +121,7 @@ PRODUCT_BOOT_JARS += telephony-ext
 PRODUCT_PACKAGES += telephony-ext
 
 ifneq ($(strip $(QCPATH)),)
-PRODUCT_BOOT_JARS += WfdCommon
+#PRODUCT_BOOT_JARS += WfdCommon
 #Android oem shutdown hook
 PRODUCT_BOOT_JARS += oem-services
 endif
@@ -134,6 +137,9 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := vendor/qcom/opensource/core-utils/
 
 # Audio configuration file
 -include $(TOPDIR)hardware/qcom/audio/configs/sdm660/sdm660.mk
+USE_LIB_PROCESS_GROUP := true
+
+USE_CUSTOM_AUDIO_POLICY := 0
 
 PRODUCT_PACKAGES += android.hardware.media.omx@1.0-impl
 
@@ -336,6 +342,11 @@ PRODUCT_PACKAGES += vndk_package
 
 TARGET_MOUNT_POINTS_SYMLINKS := false
 
+# For bringup
+WLAN_BRINGUP_NEW_SP := true
+DISP_BRINGUP_NEW_SP := true
+CAM_BRINGUP_NEW_SP := true
+SEC_USERSPACE_BRINGUP_NEW_SP := true
 
 ###################################################################################
 # This is the End of target.mk file.
