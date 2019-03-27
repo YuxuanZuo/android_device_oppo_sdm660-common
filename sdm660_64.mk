@@ -123,7 +123,7 @@ PRODUCT_PACKAGES += telephony-ext
 ifneq ($(strip $(QCPATH)),)
 #PRODUCT_BOOT_JARS += WfdCommon
 #Android oem shutdown hook
-PRODUCT_BOOT_JARS += oem-services
+#PRODUCT_BOOT_JARS += oem-services
 endif
 
 # system prop for Bluetooth SOC type
