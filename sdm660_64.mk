@@ -352,6 +352,10 @@ DISP_BRINGUP_NEW_SP := true
 CAM_BRINGUP_NEW_SP := true
 SEC_USERSPACE_BRINGUP_NEW_SP := true
 
+# Enable telephpony ims feature
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.telephony.ims.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.ims.xml
+
 ###################################################################################
 # This is the End of target.mk file.
 # Now, Pickup other split product.mk files:
