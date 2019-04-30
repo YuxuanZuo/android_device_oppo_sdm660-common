@@ -48,14 +48,14 @@ $(INSTALLED_KERNEL_TARGET): $(TARGET_PREBUILT_KERNEL) | $(ACP)
 #----------------------------------------------------------------------
 include $(CLEAR_VARS)
 LOCAL_MODULE       := vold.fstab
-LOCAL_MODULE_TAGS  := optional eng
+LOCAL_MODULE_TAGS  := optional
 LOCAL_MODULE_CLASS := ETC
 LOCAL_SRC_FILES    := $(LOCAL_MODULE)
 include $(BUILD_PREBUILT)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE       := init.target.rc
-LOCAL_MODULE_TAGS  := optional eng
+LOCAL_MODULE_TAGS  := optional
 LOCAL_MODULE_CLASS := ETC
 LOCAL_SRC_FILES    := $(LOCAL_MODULE)
 LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR_ETC)/init/hw
@@ -63,7 +63,7 @@ include $(BUILD_PREBUILT)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE       := gpio-keys.kl
-LOCAL_MODULE_TAGS  := optional eng
+LOCAL_MODULE_TAGS  := optional
 LOCAL_MODULE_CLASS := ETC
 LOCAL_SRC_FILES    := $(LOCAL_MODULE)
 LOCAL_MODULE_PATH  := $(TARGET_OUT_KEYLAYOUT)
@@ -71,7 +71,7 @@ include $(BUILD_PREBUILT)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE       := fstab.qcom
-LOCAL_MODULE_TAGS  := optional eng
+LOCAL_MODULE_TAGS  := optional
 LOCAL_MODULE_CLASS := ETC
 ifeq ($(ENABLE_AB), true)
 LOCAL_SRC_FILES    := fstab_AB_variant.qcom
