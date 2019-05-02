@@ -25,15 +25,6 @@ TARGET_DISABLE_DASH := true
 
 TARGET_KERNEL_VERSION := 4.4
 BOARD_FRP_PARTITION_NAME := frp
-TARGET_USES_NQ_NFC := false
-
-ifeq ($(TARGET_USES_NQ_NFC),true)
-# Flag to enable and support NQ3XX chipsets
-NQ3XX_PRESENT := true
-
-PRODUCT_COPY_FILES += \
-    device/qcom/common/nfc/libnfc-brcm.conf:$(TARGET_COPY_OUT_VENDOR)/etc/libnfc-nci.conf
-endif
 
 # enable the SVA in UI area
 TARGET_USE_UI_SVA := true
