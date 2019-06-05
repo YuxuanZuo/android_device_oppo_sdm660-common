@@ -132,8 +132,6 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := vendor/qcom/opensource/core-utils/
 
 USE_LIB_PROCESS_GROUP := true
 
-USE_CUSTOM_AUDIO_POLICY := 0
-
 PRODUCT_PACKAGES += android.hardware.media.omx@1.0-impl
 
 # Sensor HAL conf file
