@@ -43,6 +43,16 @@ BOARD_USE_LEGACY_UI := true
 TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_BOOTIMAGE_PARTITION_SIZE := 0x04000000
 
+ifeq ($(BOARD_KERNEL_SEPARATED_DTBO), true)
+     # Set Header version for bootimage
+     BOARD_BOOTIMG_HEADER_VERSION := 1
+     BOARD_MKBOOTIMG_ARGS := --header_version $(BOARD_BOOTIMG_HEADER_VERSION)
+     ifneq ($(ENABLE_AB), true)
+           # Enable DTBO for recovery image
+          BOARD_INCLUDE_RECOVERY_DTBO := true
+     endif
+endif
+
 ifeq ($(ENABLE_AB), true)
 #A/B related defines
 AB_OTA_UPDATER := true
