@@ -43,6 +43,25 @@ BOARD_USE_LEGACY_UI := true
 TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_BOOTIMAGE_PARTITION_SIZE := 0x04000000
 
+TARGET_KERNEL_APPEND_DTB := true
+
+ifeq ($(BOARD_KERNEL_SEPARATED_DTBO), true)
+     # Set Header version for bootimage
+     ifneq ($(strip $(TARGET_KERNEL_APPEND_DTB)),true)
+           #Enable dtb in boot image
+           BOARD_INCLUDE_DTB_IN_BOOTIMG := true
+           BOARD_BOOTIMG_HEADER_VERSION := 2
+     else
+           BOARD_BOOTIMG_HEADER_VERSION := 1
+     endif
+
+     BOARD_MKBOOTIMG_ARGS := --header_version $(BOARD_BOOTIMG_HEADER_VERSION)
+     ifneq ($(ENABLE_AB), true)
+           # Enable DTBO for recovery image
+          BOARD_INCLUDE_RECOVERY_DTBO := true
+     endif
+endif
+
 ifeq ($(ENABLE_AB), true)
 #A/B related defines
 AB_OTA_UPDATER := true
@@ -140,7 +159,6 @@ TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 TARGET_INIT_VENDOR_LIB := libinit_msm
 
 NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
-TARGET_KERNEL_APPEND_DTB := true
 TARGET_COMPILE_WITH_MSM_KERNEL := true
 
 #Enable PD locater/notifier
