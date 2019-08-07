@@ -68,7 +68,6 @@ on post-fs-data
     mkdir /data/tombstones/dsps 0771 system system
     mkdir /data/vendor/hbtp 0750 system system
     mkdir /data/misc/seemp 0700 system system
-    mkdir /data/vendor/tloc 0700 system drmrpc
 
 on boot
     start rmt_storage
@@ -445,11 +444,6 @@ service seempd /system/bin/seempd
     user system
     group system sdcard_rw
     socket seempdw dgram 0666 system system
-
-service vendor.tlocd /vendor/bin/tloc_daemon
-    class late_start
-    user system
-    group drmrpc gps net_raw
 
 service vendor.hvdcp_opti /system/vendor/bin/hvdcp_opti
      class main
