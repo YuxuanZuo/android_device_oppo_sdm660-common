@@ -352,6 +352,8 @@ SEC_USERSPACE_BRINGUP_NEW_SP := true
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.ims.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.ims.xml
 
+$(call inherit-product, build/make/target/product/product_launched_with_p.mk)
+
 ###################################################################################
 # This is the End of target.mk file.
 # Now, Pickup other split product.mk files:
