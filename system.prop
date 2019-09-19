@@ -171,6 +171,10 @@ ro.vendor.sensors.mot_detect=true
 #Expose aux camera for below packages
 vendor.camera.aux.packagelist=org.codeaurora.snapcam
 
+#Whitelisting the below packages
+persist.vendor.camera.privapp.list=org.codeaurora.snapcam
+persist.camera.privapp.list=org.codeaurora.snapcam
+
 #disable UBWC for camera
 persist.vendor.camera.preview.ubwc=0
 
