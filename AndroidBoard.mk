@@ -19,11 +19,19 @@ endif
 # Compile Linux Kernel
 #----------------------------------------------------------------------
 ifeq ($(KERNEL_DEFCONFIG),)
+ifeq ($(TARGET_KERNEL_VERSION), 4.14)
+   ifeq ($(TARGET_BUILD_VARIANT),user)
+     KERNEL_DEFCONFIG := vendor/sdm660-perf_defconfig
+   else
+     KERNEL_DEFCONFIG := vendor/sdm660_defconfig
+   endif
+ else
    ifeq ($(TARGET_BUILD_VARIANT),user)
      KERNEL_DEFCONFIG := sdm660-perf_defconfig
    else
      KERNEL_DEFCONFIG := sdm660_defconfig
    endif
+endif
 endif
 
 ifeq ($(TARGET_KERNEL_SOURCE),)

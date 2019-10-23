@@ -130,7 +130,7 @@ TARGET_USES_HWC2 := true
 TARGET_USES_GRALLOC1 := true
 
 ifeq ($(BOARD_KERNEL_CMDLINE),)
-ifeq ($(TARGET_KERNEL_VERSION),4.4)
+ifneq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION),3.18 4.9))
      BOARD_KERNEL_CMDLINE += console=ttyMSM0,115200,n8 androidboot.console=ttyMSM0 earlycon=msm_serial_dm,0xc170000
 else
      BOARD_KERNEL_CMDLINE += console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 earlycon=msm_hsl_uart,0xc1b0000

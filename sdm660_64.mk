@@ -23,7 +23,27 @@ TARGET_USES_AOSP_FOR_AUDIO := false
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
 TARGET_DISABLE_DASH := true
 
-TARGET_KERNEL_VERSION := 4.4
+ifneq ($(wildcard kernel/msm-4.14),)
+    TARGET_KERNEL_VERSION := 4.14
+    $(warning "Build with 4.14 kernel.")
+else ifneq ($(wildcard kernel/msm-4.4),)
+    TARGET_KERNEL_VERSION := 4.4
+    $(warning "Build with 4.4 kernel.")
+else
+    $(warning "Unknown kernel")
+endif
+
+ifeq ($(TARGET_KERNEL_VERSION), 4.14)
+#Enable llvm support for kernel
+KERNEL_LLVM_SUPPORT := true
+
+#Enable sd-llvm support for kernel
+KERNEL_SD_LLVM_SUPPORT := true
+
+#Enable libion support
+LIBION_PATH_INCLUDES := true
+endif
+
 BOARD_FRP_PARTITION_NAME := frp
 
 # enable the SVA in UI area
