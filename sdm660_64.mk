@@ -216,6 +216,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.sensors.cmc=false \
     ro.vendor.sdk.sensors.gestures=false
 
+# privapp-permissions whitelisting
+PRODUCT_PROPERTY_OVERRIDES += ro.control_privapp_permissions=enforce
+
 # FBE support
 PRODUCT_COPY_FILES += \
     device/qcom/sdm660_64/init.qti.qseecomd.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.qti.qseecomd.sh
@@ -269,7 +272,8 @@ endif
 #for wlan
 PRODUCT_PACKAGES += \
         wificond \
-        wifilogd
+        wifilogd \
+        wifilearner
 
 ifeq ($(ENABLE_AB), true)
 #A/B related packages
@@ -325,6 +329,11 @@ endif
 
 PRODUCT_PROPERTY_OVERRIDES += rild.libpath=/system/vendor/lib64/libril-qc-qmi-1.so
 
+# Kernel modules install path
+# Change to dlkm when dlkm feature is fully enabled
+KERNEL_MODULES_INSTALL := dlkm
+KERNEL_MODULES_OUT := out/target/product/$(PRODUCT_NAME)/$(KERNEL_MODULES_INSTALL)/lib/modules
+
 PRODUCT_PACKAGES += android.hardware.thermal@1.0-impl \
                     android.hardware.thermal@1.0-service
 
@@ -346,6 +355,8 @@ SEC_USERSPACE_BRINGUP_NEW_SP := true
 # Enable telephpony ims feature
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.ims.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.ims.xml
+
+$(call inherit-product, build/make/target/product/product_launched_with_p.mk)
 
 ###################################################################################
 # This is the End of target.mk file.
