@@ -361,6 +361,9 @@ SDM660_DISABLE_MODULE := true
 
 PRODUCT_COMPATIBLE_PROPERTY_OVERRIDE:=true
 
+# Enable STA + SAP Concurrency.
+WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
+
 # Enable vndk-sp Libraries
 PRODUCT_PACKAGES += vndk_package
 
