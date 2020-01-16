@@ -45,6 +45,79 @@ BOARD_BOOTIMAGE_PARTITION_SIZE := 0x04000000
 
 TARGET_KERNEL_APPEND_DTB := true
 
+ifeq ($(ENABLE_AB), true)
+#A/B related defines
+AB_OTA_UPDATER := true
+# Full A/B partiton update set
+# AB_OTA_PARTITIONS := xbl rpm tz hyp pmic modem abl boot keymaster cmnlib cmnlib64 system bluetooth
+# Subset A/B partitions for Android-only image update
+ifeq ($(ENABLE_VENDOR_IMAGE), true)
+  ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
+    AB_OTA_PARTITIONS ?= boot system vendor product
+  else
+    AB_OTA_PARTITIONS ?= boot system vendor
+  endif
+else
+    AB_OTA_PARTITIONS ?= boot system
+endif
+else
+BOARD_CACHEIMAGE_PARTITION_SIZE := 268435456
+BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
+ifeq ($(BOARD_AVB_ENABLE), true)
+ BOARD_AVB_RECOVERY_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
+ BOARD_AVB_RECOVERY_ALGORITHM := SHA256_RSA4096
+ BOARD_AVB_RECOVERY_ROLLBACK_INDEX := 1
+ BOARD_AVB_RECOVERY_ROLLBACK_INDEX_LOCATION := 1
+endif
+endif
+
+### Dynamic partition Handling
+ifneq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
+  ifeq ($(ENABLE_VENDOR_IMAGE), true)
+      BOARD_VENDORIMAGE_PARTITION_SIZE := 838860800
+  endif
+  BOARD_SYSTEMIMAGE_PARTITION_SIZE := 3221225472
+  BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
+  ifeq ($(ENABLE_AB), true)
+      TARGET_NO_RECOVERY := true
+      BOARD_USES_RECOVERY_AS_BOOT := true
+  else
+      BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x04000000
+      ifeq ($(BOARD_KERNEL_SEPARATED_DTBO),true)
+        # Enable DTBO for recovery image
+        BOARD_INCLUDE_RECOVERY_DTBO := true
+      endif
+  endif
+else
+  #dtbo support
+  BOARD_DTBOIMG_PARTITION_SIZE := 0x0800000
+  BOARD_KERNEL_SEPARATED_DTBO := true
+
+  # Product partition support
+  TARGET_COPY_OUT_PRODUCT := product
+  BOARD_USES_PRODUCTIMAGE := true
+  BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := ext4
+  # Define the Dynamic Partition sizes and groups.
+  ifeq ($(ENABLE_AB), true)
+    BOARD_SUPER_PARTITION_SIZE := 12884901888
+  else
+    BOARD_SUPER_PARTITION_SIZE := 5318967296
+  endif
+  ifeq ($(BOARD_KERNEL_SEPARATED_DTBO),true)
+    # Enable DTBO for recovery image
+    BOARD_INCLUDE_RECOVERY_DTBO := true
+  endif
+  BOARD_SUPER_PARTITION_GROUPS := qti_dynamic_partitions
+  BOARD_QTI_DYNAMIC_PARTITIONS_SIZE := 5314772992
+  BOARD_QTI_DYNAMIC_PARTITIONS_PARTITION_LIST := system product vendor
+  BOARD_EXT4_SHARE_DUP_BLOCKS := true
+  BOARD_RECOVERYIMAGE_PARTITION_SIZE := 67108864
+  # Metadata partition (applicable only for new launches)
+  BOARD_METADATAIMAGE_PARTITION_SIZE := 16777216
+  BOARD_USES_METADATA_PARTITION := true
+endif
+### Dynamic partition Handling
+
 ifeq ($(BOARD_KERNEL_SEPARATED_DTBO), true)
      # Set Header version for bootimage
      ifneq ($(strip $(TARGET_KERNEL_APPEND_DTB)),true)
@@ -56,46 +129,31 @@ ifeq ($(BOARD_KERNEL_SEPARATED_DTBO), true)
      endif
 
      BOARD_MKBOOTIMG_ARGS := --header_version $(BOARD_BOOTIMG_HEADER_VERSION)
-     ifneq ($(ENABLE_AB), true)
-           # Enable DTBO for recovery image
-          BOARD_INCLUDE_RECOVERY_DTBO := true
-     endif
 endif
 
-ifeq ($(ENABLE_AB), true)
-#A/B related defines
-AB_OTA_UPDATER := true
-# Full A/B partiton update set
-# AB_OTA_PARTITIONS := xbl rpm tz hyp pmic modem abl boot keymaster cmnlib cmnlib64 system bluetooth
-# Subset A/B partitions for Android-only image update
-AB_OTA_PARTITIONS ?= boot system
-BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
-TARGET_NO_RECOVERY := true
-BOARD_USES_RECOVERY_AS_BOOT := true
-else
-BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x04000000
-BOARD_CACHEIMAGE_PARTITION_SIZE := 268435456
-BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
-# Enable System As Root even for non-A/B from P onwards
-BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
-#TARGET_RECOVERY_UPDATER_LIBS += librecovery_updater_msm
-endif
-
-ifeq ($(ENABLE_AB), true)
-  ifeq ($(ENABLE_VENDOR_IMAGE), true)
-    TARGET_RECOVERY_FSTAB := device/qcom/sdm660_64/recovery_AB_split_variant.fstab
+# Recovery fstab handling
+ifneq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
+  ifeq ($(ENABLE_AB), true)
+    ifeq ($(ENABLE_VENDOR_IMAGE), true)
+      TARGET_RECOVERY_FSTAB := device/qcom/sdm660_64/recovery_AB_split_variant.fstab
+    else
+      TARGET_RECOVERY_FSTAB := device/qcom/sdm660_64/recovery_AB_non-split_variant.fstab
+    endif
   else
-    TARGET_RECOVERY_FSTAB := device/qcom/sdm660_64/recovery_AB_non-split_variant.fstab
+    ifeq ($(ENABLE_VENDOR_IMAGE), true)
+      TARGET_RECOVERY_FSTAB := device/qcom/sdm660_64/recovery_non-AB_split_variant.fstab
+    else
+      TARGET_RECOVERY_FSTAB := device/qcom/sdm660_64/recovery_non-AB_non-split_variant.fstab
+    endif
   endif
 else
-  ifeq ($(ENABLE_VENDOR_IMAGE), true)
-    TARGET_RECOVERY_FSTAB := device/qcom/sdm660_64/recovery_non-AB_split_variant.fstab
+  ifeq ($(ENABLE_AB), true)
+    TARGET_RECOVERY_FSTAB := device/qcom/sdm660_64/recovery_AB_dynamic_variant.fstab
   else
-    TARGET_RECOVERY_FSTAB := device/qcom/sdm660_64/recovery_non-AB_non-split_variant.fstab
+    TARGET_RECOVERY_FSTAB := device/qcom/sdm660_64/recovery_non-AB_dynamic_variant.fstab
   endif
 endif
 
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 3221225472
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 48318382080
 BOARD_PERSISTIMAGE_PARTITION_SIZE := 33554432
 BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
@@ -104,7 +162,6 @@ BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
 #Enable split vendor image
 ENABLE_VENDOR_IMAGE := true
 ifeq ($(ENABLE_VENDOR_IMAGE), true)
-BOARD_VENDORIMAGE_PARTITION_SIZE := 838860800
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 TARGET_COPY_OUT_VENDOR := vendor
 BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED := true
@@ -250,8 +307,12 @@ endif
 #Enable DRM plugins 64 bit compilation
 TARGET_ENABLE_MEDIADRM_64 := true
 
-#Flag to enable System SDK Requirements.
-BOARD_SYSTEMSDK_VERSIONS:=28
+ #Flag to enable System SDK Requirements.
+ifeq ($(strip $(PRODUCT_SHIPPING_API_LEVEL)),29)
+  BOARD_SYSTEMSDK_VERSIONS:=29
+else
+  BOARD_SYSTEMSDK_VERSIONS:=28
+endif
 
 #All vendor APK will be compiled against system_current API set.
 BOARD_VNDK_VERSION := current

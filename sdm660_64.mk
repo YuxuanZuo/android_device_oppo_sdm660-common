@@ -1,10 +1,5 @@
-TARGET_USES_AOSP := true
 ALLOW_MISSING_DEPENDENCIES := true
-
-TARGET_SYSTEM_PROP := device/qcom/sdm660_64/system.prop
-
-DEVICE_PACKAGE_OVERLAYS := device/qcom/sdm660_64/overlay
-
+TARGET_USES_AOSP := true
 # Default vendor configuration.
 ifeq ($(ENABLE_VENDOR_IMAGE),)
 ENABLE_VENDOR_IMAGE := true
@@ -12,16 +7,6 @@ endif
 
 # Default A/B configuration.
 ENABLE_AB ?= true
-
-# Disable QTIC until it's brought up in split system/vendor
-# configuration to avoid compilation breakage.
-ifeq ($(ENABLE_VENDOR_IMAGE), true)
-#TARGET_USES_QTIC := false
-endif
-
-TARGET_USES_AOSP_FOR_AUDIO := false
-TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
-TARGET_DISABLE_DASH := true
 
 ifneq ($(wildcard kernel/msm-4.14),)
     TARGET_KERNEL_VERSION := 4.14
@@ -32,6 +17,56 @@ else ifneq ($(wildcard kernel/msm-4.4),)
 else
     $(warning "Unknown kernel")
 endif
+
+ifeq ($(strip $(TARGET_KERNEL_VERSION)),4.14)
+    # Dynamic-partition enabled by default for new launch config
+    BOARD_DYNAMIC_PARTITION_ENABLE ?= true
+    # First launch API level
+    PRODUCT_SHIPPING_API_LEVEL := 29
+else
+    BOARD_DYNAMIC_PARTITION_ENABLE := false
+    $(call inherit-product, build/make/target/product/product_launched_with_p.mk)
+endif
+
+# New launch config
+ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
+PRODUCT_USE_DYNAMIC_PARTITIONS := true
+PRODUCT_PACKAGES += fastbootd
+# Add default implementation of fastboot HAL.
+PRODUCT_PACKAGES += android.hardware.fastboot@1.0-impl-mock
+ifeq ($(ENABLE_AB), true)
+PRODUCT_COPY_FILES += $(LOCAL_PATH)/fstab_AB_dynamic_partition_variant.qti:$(TARGET_COPY_OUT_RAMDISK)/fstab.qcom
+else
+PRODUCT_COPY_FILES += $(LOCAL_PATH)/fstab_non_AB_dynamic_partition_variant.qti:$(TARGET_COPY_OUT_RAMDISK)/fstab.qcom
+endif
+
+BOARD_AVB_ENABLE := true
+
+# Enable product partition
+PRODUCT_BUILD_PRODUCT_IMAGE := true
+# Enable vbmeta_system
+BOARD_AVB_VBMETA_SYSTEM := system product
+BOARD_AVB_VBMETA_SYSTEM_KEY_PATH := external/avb/test/data/testkey_rsa2048.pem
+BOARD_AVB_VBMETA_SYSTEM_ALGORITHM := SHA256_RSA2048
+BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
+BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX_LOCATION := 2
+$(call inherit-product, build/make/target/product/gsi_keys.mk)
+endif
+# End New launch config
+
+TARGET_SYSTEM_PROP := device/qcom/sdm660_64/system.prop
+
+DEVICE_PACKAGE_OVERLAYS := device/qcom/sdm660_64/overlay
+
+# Disable QTIC until it's brought up in split system/vendor
+# configuration to avoid compilation breakage.
+ifeq ($(ENABLE_VENDOR_IMAGE), true)
+#TARGET_USES_QTIC := false
+endif
+
+TARGET_USES_AOSP_FOR_AUDIO := false
+TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
+TARGET_DISABLE_DASH := true
 
 ifeq ($(TARGET_KERNEL_VERSION), 4.14)
 #Enable llvm support for kernel
@@ -87,6 +122,15 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 ifneq ($(TARGET_DISABLE_DASH), true)
     PRODUCT_BOOT_JARS += qcmediaplayer
+endif
+
+# split init.target.rc to support OTA and new launch targets
+ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
+PRODUCT_PACKAGES += \
+    init.target_dap.rc
+else
+PRODUCT_PACKAGES += \
+    init.target_ota.rc
 endif
 
 # Power
@@ -147,6 +191,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
     vendor.qcom.bluetooth.soc=cherokee
 
 DEVICE_MANIFEST_FILE := device/qcom/sdm660_64/manifest.xml
+ifeq ($(strip $(PRODUCT_SHIPPING_API_LEVEL)),29)
+  DEVICE_MANIFEST_FILE += device/qcom/sdm660_64/manifest_target_level_4.xml
+else
+  DEVICE_MANIFEST_FILE += device/qcom/sdm660_64/manifest_target_level_3.xml
+endif
 DEVICE_MATRIX_FILE   := device/qcom/common/compatibility_matrix.xml
 DEVICE_FRAMEWORK_MANIFEST_FILE := device/qcom/sdm660_64/framework_manifest.xml
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := vendor/qcom/opensource/core-utils/vendor_framework_compatibility_matrix.xml
@@ -255,11 +304,13 @@ PRODUCT_COPY_FILES += device/qcom/sdm660_64/msm_irqbalance.conf:$(TARGET_COPY_OU
 # MSM IRQ Balancer configuration file for SDM630
 PRODUCT_COPY_FILES += device/qcom/sdm660_64/msm_irqbalance_sdm630.conf:$(TARGET_COPY_OUT_VENDOR)/etc/msm_irqbalance_sdm630.conf
 
-# dm-verity configuration
-PRODUCT_SUPPORTS_VERITY := true
-PRODUCT_SYSTEM_VERITY_PARTITION := /dev/block/bootdevice/by-name/system
-ifeq ($(ENABLE_VENDOR_IMAGE), true)
-PRODUCT_VENDOR_VERITY_PARTITION := /dev/block/bootdevice/by-name/vendor
+ifneq ($(BOARD_AVB_ENABLE), true)
+  # dm-verity configuration
+  PRODUCT_SUPPORTS_VERITY := true
+  PRODUCT_SYSTEM_VERITY_PARTITION := /dev/block/bootdevice/by-name/system
+  ifeq ($(ENABLE_VENDOR_IMAGE), true)
+    PRODUCT_VENDOR_VERITY_PARTITION := /dev/block/bootdevice/by-name/vendor
+  endif
 endif
 
 PRODUCT_FULL_TREBLE_OVERRIDE := true
@@ -378,8 +429,6 @@ SEC_USERSPACE_BRINGUP_NEW_SP := true
 # Enable telephpony ims feature
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.ims.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.ims.xml
-
-$(call inherit-product, build/make/target/product/product_launched_with_p.mk)
 
 ###################################################################################
 # This is the End of target.mk file.
