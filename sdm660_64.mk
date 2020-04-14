@@ -138,6 +138,9 @@ PRODUCT_PACKAGES += \
     android.hardware.power@1.0-service \
     android.hardware.power@1.0-impl
 
+# privapp-permissions whitelisting
+PRODUCT_PROPERTY_OVERRIDES += ro.control_privapp_permissions=enforce
+
 # Override heap growth limit due to high display density on device
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.heapgrowthlimit=256m
@@ -284,9 +287,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.sensors.facing=false \
     ro.vendor.sensors.cmc=false \
     ro.vendor.sdk.sensors.gestures=false
-
-# privapp-permissions whitelisting
-PRODUCT_PROPERTY_OVERRIDES += ro.control_privapp_permissions=enforce
 
 # FBE support
 PRODUCT_COPY_FILES += \
