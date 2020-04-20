@@ -108,6 +108,7 @@ on boot && property:persist.vendor.usb.controller.default=*
 
 on property:vendor.usb.controller=*
     setprop sys.usb.controller ${vendor.usb.controller}
+    write /sys/module/usb_f_qcrndis/parameters/rndis_dl_max_xfer_size 15916
 
 #Peripheral manager
 service vendor.per_mgr /system/vendor/bin/pm-service
