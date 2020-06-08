@@ -3,12 +3,16 @@
 # Product-specific compile-time definitions.
 #
 
-BUILD_BROKEN_ANDROIDMK_EXPORTS :=true
-BUILD_BROKEN_DUP_COPY_HEADERS :=true
-BUILD_BROKEN_DUP_RULES :=true
-BUILD_BROKEN_PHONY_TARGETS :=true
-# TODO(b/124534788): Temporarily allow eng and debug LOCAL_MODULE_TAGS
-BUILD_BROKEN_ENG_DEBUG_TAGS:=true
+BUILD_BROKEN_DUP_RULES := true
+
+BUILD_BROKEN_PREBUILT_ELF_FILES := true
+include device/qcom/sepolicy/SEPolicy.mk
+BUILD_BROKEN_NINJA_USES_ENV_VARS := SDCLANG_AE_CONFIG SDCLANG_CONFIG SDCLANG_SA_ENABLED SDCLANG_CONFIG_AOSP
+BUILD_BROKEN_NINJA_USES_ENV_VARS += TEMPORARY_DISABLE_PATH_RESTRICTIONS
+BUILD_BROKEN_USES_BUILD_HOST_SHARED_LIBRARY := true
+BUILD_BROKEN_USES_BUILD_HOST_STATIC_LIBRARY := true
+BUILD_BROKEN_USES_BUILD_HOST_EXECUTABLE := true
+BUILD_BROKEN_USES_BUILD_COPY_HEADERS := true
 
 TARGET_BOARD_PLATFORM := sdm660
 TARGET_BOARD_SUFFIX := _64
@@ -43,7 +47,7 @@ BOARD_USE_LEGACY_UI := true
 TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_BOOTIMAGE_PARTITION_SIZE := 0x04000000
 
-TARGET_KERNEL_APPEND_DTB := true
+TARGET_KERNEL_APPEND_DTB := false
 
 ifeq ($(ENABLE_AB), true)
 #A/B related defines
@@ -178,7 +182,7 @@ BOARD_VENDOR_KERNEL_MODULES := \
     $(KERNEL_MODULES_OUT)/mpq-adapter.ko \
     $(KERNEL_MODULES_OUT)/mpq-dmx-hw-plugin.ko
 
-ifeq ($(TARGET_KERNEL_VERSION), 4.14)
+ifeq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION),4.14))
 BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_MODULES_OUT)/audio_apr.ko \
     $(KERNEL_MODULES_OUT)/audio_wglink.ko \
@@ -228,7 +232,7 @@ ifneq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION),3.18 4.9))
 else
      BOARD_KERNEL_CMDLINE += console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 earlycon=msm_hsl_uart,0xc1b0000
 endif
-BOARD_KERNEL_CMDLINE += androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 sched_enable_hmp=1 sched_enable_power_aware=1 service_locator.enable=1 swiotlb=1 loop.max_part=7
+BOARD_KERNEL_CMDLINE += androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 sched_enable_hmp=1 sched_enable_power_aware=1 service_locator.enable=1 loop.max_part=7 androidboot.selinux=permissive
 endif
 
 BOARD_EGL_CFG := device/qcom/sdm660_64/egl.cfg
@@ -252,7 +256,7 @@ TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
 MAX_VIRTUAL_DISPLAY_DIMENSION := 4096
 
 BOARD_USES_GENERIC_AUDIO := true
-USE_CAMERA_STUB := false
+USE_CAMERA_STUB := true
 BOARD_QTI_CAMERA_32BIT_ONLY := true
 TARGET_NO_RPC := true
 
@@ -268,7 +272,7 @@ TARGET_PD_SERVICE_ENABLED := true
 #Enable HW based full disk encryption
 TARGET_HW_DISK_ENCRYPTION := true
 
-ifeq ($(TARGET_KERNEL_VERSION), 4.14)
+ifeq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION),4.14 4.19))
 TARGET_HW_DISK_ENCRYPTION_PERF := true
 endif
 
@@ -298,7 +302,7 @@ ENABLE_CPUSETS := true
 ENABLE_SCHEDBOOST := true
 
 #Enabling IMS Feature
-TARGET_USES_IMS := true
+TARGET_USES_IMS := false
 
 #Add NON-HLOS files for ota upgrade
 ADD_RADIO_FILES := true

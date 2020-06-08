@@ -341,7 +341,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         </interface>
     </hal>
     <!-- gnss -->
-    <hal format="hidl">
+    <!-- <hal format="hidl">
         <name>android.hardware.gnss</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
@@ -350,7 +350,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <instance>default</instance>
         </interface>
         <fqname>@1.0::IGnss/gnss_vendor</fqname>
-    </hal>
+    </hal> -->
     <hal format="hidl">
         <name>vendor.qti.gnss</name>
         <transport>hwbinder</transport>
@@ -369,7 +369,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <instance>gnss_vendor</instance>
         </interface>
     </hal>
-    <hal format="hidl">
+    <!-- <hal format="hidl">
         <name>android.hardware.vibrator</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
@@ -387,7 +387,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <name>IdpmQmi</name>
             <instance>dpmQmiService</instance>
         </interface>
-    </hal>
+    </hal> -->
 
     <hal format="hidl">
         <name>vendor.qti.imsrtpservice</name>
@@ -418,7 +418,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <instance>slot2</instance>
         </interface>
     </hal>
-    <hal format="hidl">
+    <!-- <hal format="hidl">
         <name>vendor.qti.hardware.radio.qtiradio</name>
         <transport>hwbinder</transport>
         <version>2.4</version>
@@ -427,7 +427,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <instance>slot1</instance>
             <instance>slot2</instance>
         </interface>
-    </hal>
+    </hal> -->
     <hal format="hidl">
         <name>vendor.qti.hardware.fm</name>
         <transport>hwbinder</transport>
@@ -475,7 +475,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                <instance>oemhook1</instance>
            </interface>
     </hal>
-    <hal format="hidl">
+   <!--- <hal format="hidl">
         <name>android.hardware.usb</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
@@ -483,7 +483,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <name>IUsb</name>
             <instance>default</instance>
         </interface>
-    </hal>
+    </hal> -->
 
     <!-- Alarm HAL service -->
     <hal format="hidl">

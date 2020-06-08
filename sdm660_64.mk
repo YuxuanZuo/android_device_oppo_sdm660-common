@@ -8,9 +8,19 @@ endif
 # Default A/B configuration.
 ENABLE_AB ?= true
 
-ifneq ($(wildcard kernel/msm-4.14),)
-    TARGET_KERNEL_VERSION := 4.14
-    $(warning "Build with 4.14 kernel.")
+# Disable QTIC until it's brought up in split system/vendor
+# configuration to avoid compilation breakage.
+ifeq ($(ENABLE_VENDOR_IMAGE), true)
+#TARGET_USES_QTIC := false
+endif
+
+TARGET_USES_AOSP_FOR_AUDIO := false
+TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
+TARGET_DISABLE_DASH := true
+
+ifneq ($(wildcard kernel/msm-4.19),)
+    TARGET_KERNEL_VERSION := 4.19
+    $(warning "Build with 4.19 kernel.")
 else ifneq ($(wildcard kernel/msm-4.4),)
     TARGET_KERNEL_VERSION := 4.4
     $(warning "Build with 4.4 kernel.")
@@ -18,7 +28,7 @@ else
     $(warning "Unknown kernel")
 endif
 
-ifeq ($(strip $(TARGET_KERNEL_VERSION)),4.14)
+ifeq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION),4.14 4.19))
     # Dynamic-partition enabled by default for new launch config
     BOARD_DYNAMIC_PARTITION_ENABLE ?= true
     # First launch API level
@@ -68,7 +78,7 @@ TARGET_USES_AOSP_FOR_AUDIO := false
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
 TARGET_DISABLE_DASH := true
 
-ifeq ($(TARGET_KERNEL_VERSION), 4.14)
+ifeq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION),4.14 4.19))
 #Enable llvm support for kernel
 KERNEL_LLVM_SUPPORT := true
 
@@ -139,7 +149,7 @@ PRODUCT_PACKAGES += \
     android.hardware.power@1.0-impl
 
 # privapp-permissions whitelisting
-PRODUCT_PROPERTY_OVERRIDES += ro.control_privapp_permissions=enforce
+#PRODUCT_PROPERTY_OVERRIDES += ro.control_privapp_permissions=enforce
 
 # Override heap growth limit due to high display density on device
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -360,12 +370,6 @@ PRODUCT_HOST_PACKAGES += \
 
 #Boot control HAL test app
 PRODUCT_PACKAGES_DEBUG += bootctl
-
-PRODUCT_STATIC_BOOT_CONTROL_HAL := \
-  bootctrl.sdm660 \
-  librecovery_updater_msm \
-  libz \
-  libcutils
 
 PRODUCT_PACKAGES += \
   update_engine_sideload

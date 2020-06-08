@@ -189,15 +189,15 @@ service thermal-engine /system/vendor/bin/thermal-engine
 #    oneshot
 #
 
-service adsprpcd_root /vendor/bin/adsprpcd
-   class main
-   user media
-   group media
+#service adsprpcd_root /vendor/bin/adsprpcd
+#   class main
+#   user media
+#   group media
 
-service adsprpcd /vendor/bin/adsprpcd audiopd
-   class main
-   user media
-   group media
+#service adsprpcd /vendor/bin/adsprpcd audiopd
+#   class main
+#   user media
+#   group media
 
 service hbtp /system/vendor/bin/hbtp_daemon
     class main
@@ -210,11 +210,11 @@ service audiod /system/vendor/bin/audiod
    user system
    group system
 
-service vendor.cdsprpcd /vendor/bin/cdsprpcd
-   class main
-   user system
-   group system
-   disabled
+#service vendor.cdsprpcd /vendor/bin/cdsprpcd
+#   class main
+#   user system
+#   group system
+#   disabled
 
 #
 #service usf_tester /system/vendor/bin/usf_tester
@@ -414,7 +414,6 @@ on property:init.svc.zygote=restarting
     stop ppd
 
 on charger
-    load_system_props
     start qcom-post-boot
     start vendor.hvdcp_opti
     setprop vendor.usb.controller a800000.dwc3
