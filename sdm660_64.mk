@@ -35,6 +35,8 @@ ifeq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION),4.14 4.19))
     BOARD_DYNAMIC_PARTITION_ENABLE := true
     # First launch API level
     PRODUCT_SHIPPING_API_LEVEL := $(SHIPPING_API_LEVEL)
+    # Enable virtual-ab by default
+    ENABLE_VIRTUAL_AB := true
   else
     BOARD_DYNAMIC_PARTITION_ENABLE := false
     $(call inherit-product, build/make/target/product/product_launched_with_p.mk)
@@ -86,6 +88,10 @@ DEVICE_PACKAGE_OVERLAYS := device/qcom/sdm660_64/overlay
 # configuration to avoid compilation breakage.
 ifeq ($(ENABLE_VENDOR_IMAGE), true)
 #TARGET_USES_QTIC := false
+endif
+
+ifeq ($(ENABLE_VIRTUAL_AB), true)
+    $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
 endif
 
 TARGET_USES_AOSP_FOR_AUDIO := false
@@ -368,9 +374,9 @@ ifeq ($(ENABLE_AB), true)
 PRODUCT_PACKAGES += update_engine \
                     update_engine_client \
                     update_verifier \
-                    bootctrl.sdm660 \
-                    android.hardware.boot@1.0-impl \
-                    android.hardware.boot@1.0-service
+                    android.hardware.boot@1.1-impl-qti \
+                    android.hardware.boot@1.1-impl-qti.recovery \
+                    android.hardware.boot@1.1-service
 
 PRODUCT_HOST_PACKAGES += \
   brillo_update_payload
