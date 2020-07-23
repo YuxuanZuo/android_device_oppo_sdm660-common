@@ -199,10 +199,6 @@ PRODUCT_BOOT_JARS += WfdCommon
 #PRODUCT_BOOT_JARS += oem-services
 endif
 
-# system prop for Bluetooth SOC type
-PRODUCT_PROPERTY_OVERRIDES += \
-    vendor.qcom.bluetooth.soc=cherokee
-
 DEVICE_MANIFEST_FILE := device/qcom/sdm660_64/manifest.xml
 ifeq ($(strip $(PRODUCT_SHIPPING_API_LEVEL)),29)
   DEVICE_MANIFEST_FILE += device/qcom/sdm660_64/manifest_target_level_4.xml
@@ -241,11 +237,8 @@ PRODUCT_PACKAGES += \
     wpa_supplicant_overlay.conf \
     p2p_supplicant_overlay.conf
 
-#ANT+ stack
+#audio related module
 PRODUCT_PACKAGES += \
-    AntHalService \
-    libantradio \
-    antradio_app \
     libvolumelistener
 
 #Display/Graphics
