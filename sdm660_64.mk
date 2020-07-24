@@ -29,13 +29,25 @@ else
 endif
 
 ifeq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION),4.14 4.19))
+  SHIPPING_API_LEVEL :=29
+  ifeq (true,$(call math_gt_or_eq,$(SHIPPING_API_LEVEL),29))
     # Dynamic-partition enabled by default for new launch config
-    BOARD_DYNAMIC_PARTITION_ENABLE ?= true
+    BOARD_DYNAMIC_PARTITION_ENABLE := true
     # First launch API level
-    PRODUCT_SHIPPING_API_LEVEL := 29
-else
+    PRODUCT_SHIPPING_API_LEVEL := $(SHIPPING_API_LEVEL)
+  else
     BOARD_DYNAMIC_PARTITION_ENABLE := false
     $(call inherit-product, build/make/target/product/product_launched_with_p.mk)
+  endif
+else
+  SHIPPING_API_LEVEL :=28
+  BOARD_DYNAMIC_PARTITION_ENABLE := false
+  $(call inherit-product, build/make/target/product/product_launched_with_p.mk)
+endif
+
+# Include mainline components
+ifeq (true,$(call math_gt_or_eq,$(SHIPPING_API_LEVEL),29))
+  PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS := true
 endif
 
 # New launch config
@@ -54,8 +66,10 @@ BOARD_AVB_ENABLE := true
 
 # Enable product partition
 PRODUCT_BUILD_PRODUCT_IMAGE := true
+# Enable System_ext
+PRODUCT_BUILD_SYSTEM_EXT_IMAGE := true
 # Enable vbmeta_system
-BOARD_AVB_VBMETA_SYSTEM := system product
+BOARD_AVB_VBMETA_SYSTEM := system product system_ext
 BOARD_AVB_VBMETA_SYSTEM_KEY_PATH := external/avb/test/data/testkey_rsa2048.pem
 BOARD_AVB_VBMETA_SYSTEM_ALGORITHM := SHA256_RSA2048
 BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
@@ -198,7 +212,7 @@ PRODUCT_BOOT_JARS += WfdCommon
 endif
 
 DEVICE_MANIFEST_FILE := device/qcom/sdm660_64/manifest.xml
-ifeq ($(strip $(PRODUCT_SHIPPING_API_LEVEL)),29)
+ifeq (true,$(call math_gt_or_eq,$(SHIPPING_API_LEVEL),29))
   DEVICE_MANIFEST_FILE += device/qcom/sdm660_64/manifest_target_level_4.xml
 else
   DEVICE_MANIFEST_FILE += device/qcom/sdm660_64/manifest_target_level_3.xml

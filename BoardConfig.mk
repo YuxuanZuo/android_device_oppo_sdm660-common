@@ -58,7 +58,7 @@ AB_OTA_UPDATER := true
 # Subset A/B partitions for Android-only image update
 ifeq ($(ENABLE_VENDOR_IMAGE), true)
   ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
-    AB_OTA_PARTITIONS ?= boot system vendor product
+    AB_OTA_PARTITIONS ?= boot system vendor product vbmeta_system system_ext
   else
     AB_OTA_PARTITIONS ?= boot system vendor
   endif
@@ -102,6 +102,11 @@ else
   TARGET_COPY_OUT_PRODUCT := product
   BOARD_USES_PRODUCTIMAGE := true
   BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := ext4
+
+  # System_ext support
+  TARGET_COPY_OUT_SYSTEM_EXT := system_ext
+  BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := ext4
+
   # Define the Dynamic Partition sizes and groups.
   ifeq ($(ENABLE_AB), true)
     BOARD_SUPER_PARTITION_SIZE := 12884901888
@@ -114,7 +119,7 @@ else
   endif
   BOARD_SUPER_PARTITION_GROUPS := qti_dynamic_partitions
   BOARD_QTI_DYNAMIC_PARTITIONS_SIZE := 5314772992
-  BOARD_QTI_DYNAMIC_PARTITIONS_PARTITION_LIST := system product vendor
+  BOARD_QTI_DYNAMIC_PARTITIONS_PARTITION_LIST := system product vendor system_ext
   BOARD_EXT4_SHARE_DUP_BLOCKS := true
   BOARD_RECOVERYIMAGE_PARTITION_SIZE := 67108864
   # Metadata partition (applicable only for new launches)
@@ -319,12 +324,8 @@ endif
 #Enable DRM plugins 64 bit compilation
 TARGET_ENABLE_MEDIADRM_64 := true
 
- #Flag to enable System SDK Requirements.
-ifeq ($(strip $(PRODUCT_SHIPPING_API_LEVEL)),29)
-  BOARD_SYSTEMSDK_VERSIONS:=29
-else
-  BOARD_SYSTEMSDK_VERSIONS:=28
-endif
+#Flag to enable System SDK Requirements.
+BOARD_SYSTEMSDK_VERSIONS:=$(SHIPPING_API_LEVEL)
 
 #All vendor APK will be compiled against system_current API set.
 BOARD_VNDK_VERSION := current
