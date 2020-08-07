@@ -133,6 +133,8 @@ PRODUCT_COPY_FILES += \
   PRODUCT_PROPERTY_OVERRIDES += debug.stagefright.omx_default_rank=0
 endif #TARGET_ENABLE_QC_AV_ENHANCEMENTS
 
+PRODUCT_PROPERTY_OVERRIDES += persist.vendor.camera.dual.isp.sync=0
+
 # video seccomp policy files
 PRODUCT_COPY_FILES += \
     device/qcom/sdm660_64/seccomp/mediacodec-seccomp.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediacodec.policy \
