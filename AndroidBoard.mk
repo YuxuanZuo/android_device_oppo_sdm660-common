@@ -126,17 +126,31 @@ include $(BUILD_PREBUILT)
 
 ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
 include $(CLEAR_VARS)
-LOCAL_MODULE       := fstab.qcom
+LOCAL_MODULE       := fstab.default
 LOCAL_MODULE_TAGS  := optional
 LOCAL_MODULE_CLASS := ETC
 ifeq ($(ENABLE_AB), true)
-LOCAL_SRC_FILES    := fstab_AB_dynamic_partition_variant.qti
+LOCAL_SRC_FILES    := default/fstab_AB_dynamic_partition_variant.qti
 else
-LOCAL_SRC_FILES    := fstab_non_AB_dynamic_partition_variant.qti
+LOCAL_SRC_FILES    := default/fstab_non_AB_dynamic_partition_variant.qti
 endif
 LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR_ETC)
 include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE       := fstab.emmc
+LOCAL_MODULE_TAGS  := optional
+LOCAL_MODULE_CLASS := ETC
+ifeq ($(ENABLE_AB), true)
+LOCAL_SRC_FILES    := emmc/fstab_AB_dynamic_partition_variant.qti
 else
+LOCAL_SRC_FILES    := emmc/fstab_non_AB_dynamic_partition_variant.qti
+endif
+LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR_ETC)
+include $(BUILD_PREBUILT)
+
+else
+
 include $(CLEAR_VARS)
 LOCAL_MODULE       := fstab.qcom
 LOCAL_MODULE_TAGS  := optional

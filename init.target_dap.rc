@@ -29,7 +29,7 @@
 
 on fs
     start hwservicemanager
-    mount_all /vendor/etc/fstab.qcom --early
+    mount_all --early
     swapon_all /vendor/etc/fstab.qcom
     chown root system /mnt/vendor/persist
     chmod 0771 /mnt/vendor/persist
@@ -41,4 +41,4 @@ on fs
 on late-fs
     wait_for_prop hwservicemanager.ready true
     exec_start wait_for_keymaster
-    mount_all /vendor/etc/fstab.qcom --late
+    mount_all --late
