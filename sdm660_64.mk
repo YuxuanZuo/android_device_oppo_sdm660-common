@@ -42,6 +42,8 @@ ifeq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION),4.14 4.19))
     PRODUCT_SHIPPING_API_LEVEL := $(SHIPPING_API_LEVEL)
     # Enable virtual-ab by default
     ENABLE_VIRTUAL_AB := true
+    # Enable incremental FS feature
+    PRODUCT_PROPERTY_OVERRIDES += ro.incremental.enable=1
   else
     BOARD_DYNAMIC_PARTITION_ENABLE := false
     $(call inherit-product, build/make/target/product/product_launched_with_p.mk)
