@@ -181,6 +181,14 @@ LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR_ETC)/hostapd
 LOCAL_SRC_FILES    := hostapd.deny
 include $(BUILD_PREBUILT)
 
+include $(CLEAR_VARS)
+LOCAL_MODULE       := init.qcom.sensors.sh
+LOCAL_MODULE_TAGS  := optional
+LOCAL_MODULE_CLASS := ETC
+LOCAL_SRC_FILES    := $(LOCAL_MODULE)
+LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR)/bin
+include $(BUILD_PREBUILT)
+
 # Create symbolic links for WLAN
 $(shell mkdir -p $(TARGET_OUT_VENDOR)/firmware/wlan/qca_cld; \
 ln -sf /vendor/etc/wifi/WCNSS_qcom_cfg.ini \
