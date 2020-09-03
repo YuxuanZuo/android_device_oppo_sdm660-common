@@ -444,6 +444,10 @@ SEC_USERSPACE_BRINGUP_NEW_SP := true
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.ims.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.ims.xml
 
+ifeq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION),4.14 4.19))
+PRODUCT_PACKAGES += init.qti.dcvs.sh
+endif
+
 ###################################################################################
 # This is the End of target.mk file.
 # Now, Pickup other split product.mk files:
