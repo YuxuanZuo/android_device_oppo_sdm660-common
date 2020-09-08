@@ -86,8 +86,6 @@ persist.timed.enable=true
 ro.qualcomm.cabl=2
 ro.vendor.display.cabl=2
 
-vendor.gralloc.disable_ahardware_buffer=1
-
 #
 # System props for telephony
 # System prop to turn on CdmaLTEPhone always
