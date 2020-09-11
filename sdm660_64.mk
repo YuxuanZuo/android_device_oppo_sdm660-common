@@ -28,6 +28,11 @@ else
     $(warning "Unknown kernel")
 endif
 
+# Enable RRO for Android R
+ifeq ($(strip $(TARGET_KERNEL_VERSION)), 4.19)
+    TARGET_USES_RRO := true
+endif
+
 ifeq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION),4.14 4.19))
   SHIPPING_API_LEVEL :=29
   ifeq (true,$(call math_gt_or_eq,$(SHIPPING_API_LEVEL),29))
