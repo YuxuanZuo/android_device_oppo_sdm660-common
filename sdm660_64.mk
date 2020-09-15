@@ -158,9 +158,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     vendor.video.disable.ubwc=1
 
-PRODUCT_PROPERTY_OVERRIDES += \
-    vendor.gralloc.disable_ahardware_buffer=1
-
 ifneq ($(TARGET_DISABLE_DASH), true)
     PRODUCT_BOOT_JARS += qcmediaplayer
 endif
