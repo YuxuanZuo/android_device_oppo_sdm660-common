@@ -61,6 +61,12 @@ on post-fs-data
     mkdir /data/vendor/hbtp 0750 system system
     mkdir /data/vendor/misc/seemp 0700 system system
 
+on early-boot
+    chown system system /mnt/vendor/persist/sensors
+    chown system system /mnt/vendor/persist/sensors/sns.reg
+    chown system system /mnt/vendor/persist/sensors/sensors_settings
+    chmod 0664 /mnt/vendor/persist/sensors/sensors_settings
+
 on boot
     start rmt_storage
     start rfs_access
