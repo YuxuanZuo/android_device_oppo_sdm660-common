@@ -448,6 +448,10 @@ DISP_BRINGUP_NEW_SP := true
 CAM_BRINGUP_NEW_SP := true
 SEC_USERSPACE_BRINGUP_NEW_SP := true
 
+#vendor prop to disable advanced network scanning
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.vendor.radio.enableadvancedscan=false
+
 # Enable telephpony ims feature
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.ims.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.ims.xml
