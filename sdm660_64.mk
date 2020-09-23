@@ -442,6 +442,10 @@ PRODUCT_PACKAGES += vndk_package
 
 TARGET_MOUNT_POINTS_SYMLINKS := false
 
+# Disable skip validate
+PRODUCT_PROPERTY_OVERRIDES += \
+  vendor.display.disable_skip_validate=1
+
 # For bringup
 WLAN_BRINGUP_NEW_SP := true
 DISP_BRINGUP_NEW_SP := true
