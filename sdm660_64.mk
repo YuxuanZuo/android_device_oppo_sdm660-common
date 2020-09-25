@@ -171,10 +171,12 @@ PRODUCT_PACKAGES += \
     init.target_ota.rc
 endif
 
+ifeq (false,$(call math_gt_or_eq,$(SHIPPING_API_LEVEL),29))
 # Power
 PRODUCT_PACKAGES += \
     android.hardware.power@1.0-service \
     android.hardware.power@1.0-impl
+endif
 
 # privapp-permissions whitelisting
 PRODUCT_PROPERTY_OVERRIDES += ro.control_privapp_permissions=enforce
