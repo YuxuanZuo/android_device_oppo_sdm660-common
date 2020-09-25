@@ -228,6 +228,10 @@ PRODUCT_PACKAGES += telephony-ext
 #endif
 
 DEVICE_MANIFEST_FILE := device/qcom/sdm660_64/manifest.xml
+ifeq ($(strip $(TARGET_KERNEL_VERSION)), 4.19)
+  DEVICE_MANIFEST_FILE += device/qcom/sdm660_64/manifest_soundtrigger.xml
+endif
+
 ifeq (true,$(call math_gt_or_eq,$(SHIPPING_API_LEVEL),29))
   DEVICE_MANIFEST_FILE += device/qcom/sdm660_64/manifest_target_level_4.xml
 else
