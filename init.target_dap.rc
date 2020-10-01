@@ -28,8 +28,7 @@
 #
 
 on fs
-    wait /dev/block/platform/soc/${ro.boot.bootdevice}
-    symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+    start hwservicemanager
     mount_all /vendor/etc/fstab.qcom --early
     swapon_all /vendor/etc/fstab.qcom
     chown root system /mnt/vendor/persist
@@ -40,4 +39,6 @@ on fs
     write /sys/kernel/boot_adsp/boot 1
 
 on late-fs
+    wait_for_prop hwservicemanager.ready true
+    exec_start wait_for_keymaster
     mount_all /vendor/etc/fstab.qcom --late
