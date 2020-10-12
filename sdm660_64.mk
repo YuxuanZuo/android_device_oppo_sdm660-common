@@ -177,7 +177,7 @@ PRODUCT_PACKAGES += \
     android.hardware.power@1.0-impl
 
 # privapp-permissions whitelisting
-#PRODUCT_PROPERTY_OVERRIDES += ro.control_privapp_permissions=enforce
+PRODUCT_PROPERTY_OVERRIDES += ro.control_privapp_permissions=enforce
 
 # Override heap growth limit due to high display density on device
 PRODUCT_PROPERTY_OVERRIDES += \
