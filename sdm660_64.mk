@@ -218,11 +218,11 @@ PRODUCT_BOOT_JARS += telephony-ext
 
 PRODUCT_PACKAGES += telephony-ext
 
-#ifneq ($(strip $(QCPATH)),)
-#PRODUCT_BOOT_JARS += WfdCommon
+ifneq ($(strip $(QCPATH)),)
+PRODUCT_BOOT_JARS += WfdCommon
 #Android oem shutdown hook
 #PRODUCT_BOOT_JARS += oem-services
-#endif
+endif
 
 DEVICE_MANIFEST_FILE := device/qcom/sdm660_64/manifest.xml
 ifeq ($(strip $(TARGET_KERNEL_VERSION)), 4.19)
