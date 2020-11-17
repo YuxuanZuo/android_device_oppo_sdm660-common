@@ -238,6 +238,11 @@ TARGET_USES_QCOM_DISPLAY_BSP := true
 #Gralloc h/w specif flags
 TARGET_USES_HWC2 := true
 TARGET_USES_GRALLOC1 := true
+ifeq (true,$(call math_gt_or_eq,$(SHIPPING_API_LEVEL),29))
+TARGET_USES_QTI_MAPPER_2_0 := true
+TARGET_USES_QTI_MAPPER_EXTENSIONS_1_1 := true
+TARGET_USES_GRALLOC4 := true
+endif
 
 ifeq ($(BOARD_KERNEL_CMDLINE),)
 ifneq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION),3.18 4.9))
