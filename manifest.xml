@@ -304,7 +304,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <instance>slot2</instance>
         </interface>
     </hal>
-    <!-- <hal format="hidl">
+    <hal format="hidl">
         <name>com.qualcomm.qti.dpm.api</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
@@ -312,7 +312,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <name>IdpmQmi</name>
             <instance>dpmQmiService</instance>
         </interface>
-    </hal> -->
+    </hal>
 
     <hal format="hidl">
         <name>vendor.qti.imsrtpservice</name>
