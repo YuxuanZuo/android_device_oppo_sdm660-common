@@ -40,17 +40,15 @@ include $(BUILD_SYSTEM)/base_rules.mk
 
 ################################################################################
 KERNEL_PLATFORM_PATH:=kernel_platform
-KERNEL_PLATFORM_OUT_DIR:=$(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ
+KERNEL_PLATFORM_TO_ROOT:=../
 
-ifeq ($(wildcard $(KERNEL_PLATFORM_OUT_DIR)/),)
-$(error "$(KERNEL_PLATFORM_OUT_DIR) doesn't exist. Have you run kernel_platform/build/android/prepare.sh?")
-endif
 ################################################################################
+KP_DLKM_INTERMEDIATE:=$(TARGET_OUT_INTERMEDIATES)/DLKM_OBJ
 # Intermediate directory where the kernel modules are created
 # by the kernel platform. Ideally this would be the same
 # directory as LOCAL_BUILT_MODULE, but because we're using
 # relative paths for both O= and M=, we don't have much choice
-MODULE_KP_OUT_DIR := $(KERNEL_PLATFORM_OUT_DIR)/$(LOCAL_PATH)
+MODULE_KP_OUT_DIR := $(KP_DLKM_INTERMEDIATE)/$(LOCAL_PATH)
 
 # The kernel build system doesn't support parallel kernel module builds
 # that share the same output directory. Thus, in order to build multiple
@@ -90,16 +88,12 @@ $(MODULE_KP_COMBINED_TARGET)_RULE := 1
 #    fail as they all try to compile these executables at the same time)
 #  * a full kernel build (to make module versioning work)
 $(MODULE_KP_COMBINED_TARGET): local_path     := $(LOCAL_PATH)
+$(MODULE_KP_COMBINED_TARGET): local_out      := $(MODULE_KP_OUT_DIR)
 $(MODULE_KP_COMBINED_TARGET): kbuild_options := $(KBUILD_OPTIONS)
 $(MODULE_KP_COMBINED_TARGET): $(LOCAL_ADDITIONAL_DEPENDENCIES) $(LOCAL_SRC_FILES)
-	# Create a symlink so that Kernel Platform thinks module source lives inside
-	# kernel platform directory structure.
-	# this makes finding the output much less confusing and helps prevent
-	# possibility of conflicting output folders if we were to use relative path
-	# outside the kernel_platform directory structure. Kbuild output goes to:
-	# $(KERNEL_PLATFORM_OUT_DIR)/$(MODULE_KP_SYMLINK)/$(LOCAL_PATH)
 	(cd $(KERNEL_PLATFORM_PATH) && \
 	    EXT_MODULES=la/$(local_path) \
+	    MODULE_OUT=$(KERNEL_PLATFORM_TO_ROOT)$(local_out) \
 	    ./build/build_module.sh $(kbuild_options) \
 	    ANDROID_BUILD_TOP=$$(realpath $$(pwd)/$(KERNEL_PLATFORM_TO_ROOT)) \
 	)
