@@ -34,7 +34,7 @@ ifeq ($(strip $(TARGET_KERNEL_VERSION)), 4.19)
 endif
 
 ifeq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION),4.14 4.19))
-  SHIPPING_API_LEVEL :=29
+  SHIPPING_API_LEVEL :=30
   ifeq (true,$(call math_gt_or_eq,$(SHIPPING_API_LEVEL),29))
     # Dynamic-partition enabled by default for new launch config
     BOARD_DYNAMIC_PARTITION_ENABLE := true
@@ -231,7 +231,9 @@ ifeq ($(strip $(TARGET_KERNEL_VERSION)), 4.19)
   DEVICE_MANIFEST_FILE += device/qcom/sdm660_64/manifest_soundtrigger.xml
 endif
 
-ifeq (true,$(call math_gt_or_eq,$(SHIPPING_API_LEVEL),29))
+ifeq ($(strip $(SHIPPING_API_LEVEL)), 30)
+  DEVICE_MANIFEST_FILE += device/qcom/sdm660_64/manifest_target_level_5.xml
+else ifeq ($(strip $(SHIPPING_API_LEVEL)), 29)
   DEVICE_MANIFEST_FILE += device/qcom/sdm660_64/manifest_target_level_4.xml
 else
   DEVICE_MANIFEST_FILE += device/qcom/sdm660_64/manifest_target_level_3.xml
