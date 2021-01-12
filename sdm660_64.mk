@@ -470,6 +470,8 @@ ifeq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION),4.14 4.19))
 PRODUCT_PACKAGES += init.qti.dcvs.sh
 endif
 
+PRODUCT_PACKAGES += libnbaio
+
 ###################################################################################
 # This is the End of target.mk file.
 # Now, Pickup other split product.mk files:
