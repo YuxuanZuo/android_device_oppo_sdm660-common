@@ -197,7 +197,7 @@ BOARD_VENDOR_KERNEL_MODULES := \
     $(KERNEL_MODULES_OUT)/mpq-adapter.ko \
     $(KERNEL_MODULES_OUT)/mpq-dmx-hw-plugin.ko
 
-ifeq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION),4.14))
+ifeq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION),4.14 4.19))
 BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_MODULES_OUT)/audio_apr.ko \
     $(KERNEL_MODULES_OUT)/audio_wglink.ko \
@@ -329,7 +329,7 @@ ENABLE_CPUSETS := true
 ENABLE_SCHEDBOOST := true
 
 #Enabling IMS Feature
-TARGET_USES_IMS := false
+TARGET_USES_IMS := true
 
 #Add NON-HLOS files for ota upgrade
 ADD_RADIO_FILES := true
