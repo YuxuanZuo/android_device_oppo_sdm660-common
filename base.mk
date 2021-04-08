@@ -48,9 +48,6 @@ QSD8K_BOARD_PLATFORMS := qsd8k
 TARGET_USE_VENDOR_CAMERA_EXT := true
 
 # Boot additions
-ifeq ($(strip $(TARGET_USES_NQ_NFC)),true)
-PRODUCT_BOOT_JARS += com.nxp.nfc.nq
-endif
 #Camera QC extends API
 #ifeq ($(strip $(TARGET_USES_QTIC_EXTENSION)),true)
 #PRODUCT_BOOT_JARS += com.qualcomm.qti.camera
@@ -663,34 +660,6 @@ MM_VIDEO += mm-video-encdrv-test
 MM_VIDEO += ExoplayerDemo
 MM_VIDEO += libaacwrapper
 
-#NQ_NFC
-NQ_NFC := NQNfcNci
-NQ_NFC += libnqnfc-nci
-NQ_NFC += libnqnfc_nci_jni
-NQ_NFC += libsn100nfc_nci_jni
-NQ_NFC += libsn100nfc-nci
-NQ_NFC += nfc_nci.nqx.default
-NQ_NFC += nfc_nci.sn100.default
-NQ_NFC += libp61-jcop-kit
-NQ_NFC += com.nxp.nfc.nq
-NQ_NFC += com.nxp.nfc.nq.xml
-NQ_NFC += com.gsma.services.nfc
-NQ_NFC += libpn547_fw.so
-NQ_NFC += libpn548ad_fw.so
-NQ_NFC += libnfc-brcm.conf
-NQ_NFC += libnfc-brcm_NCI2_0.conf
-NQ_NFC += libnfc-nci.conf
-NQ_NFC += libnfc-nci_NCI2_0.conf
-NQ_NFC += libnfc-nxp_default.conf
-NQ_NFC += nqnfcee_access.xml
-NQ_NFC += nqnfcse_access.xml
-NQ_NFC += Tag
-NQ_NFC += nqnfcinfo
-NQ_NFC += com.android.nfc_extras
-NQ_NFC += vendor.nxp.hardware.nfc@1.1-service
-NQ_NFC += nfc_nci.nqx.default.hw
-NQ_NFC += nfc_nci.sn100.default.hw
-PRODUCT_PROPERTY_OVERRIDES += ro.hardware.nfc_nci=nqx.default
 
 #OPENCORE
 OPENCORE := libomx_aacdec_sharedlibrary
@@ -955,9 +924,6 @@ PRODUCT_PACKAGES += $(MM_AUDIO)
 PRODUCT_PACKAGES += $(MM_CORE)
 PRODUCT_PACKAGES += $(MM_WFD)
 PRODUCT_PACKAGES += $(MM_VIDEO)
-ifeq ($(strip $(TARGET_USES_NQ_NFC)),true)
-PRODUCT_PACKAGES += $(NQ_NFC)
-endif
 PRODUCT_PACKAGES += $(OPENCORE)
 PRODUCT_PACKAGES += $(PPP)
 PRODUCT_PACKAGES += $(PROTOBUF)
@@ -1064,15 +1030,6 @@ ifneq ($(TARGET_ENABLE_QC_AV_ENHANCEMENTS),true)
 PRODUCT_COPY_FILES += \
     device/qcom/common/media/media_codecs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml \
     device/qcom/common/media/media_profiles.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_V1_0.xml
-endif
-
-ifeq ($(strip $(TARGET_USES_NQ_NFC)),true)
-PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/com.nxp.mifare.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/com.nxp.mifare.xml \
-    frameworks/native/data/etc/com.android.nfc_extras.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/com.android.nfc_extras.xml \
-    frameworks/native/data/etc/android.hardware.nfc.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.xml \
-    frameworks/native/data/etc/android.hardware.nfc.hce.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.hce.xml \
-    frameworks/native/data/etc/android.hardware.nfc.hcef.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.hcef.xml
 endif
 
 ifneq ($(TARGET_NOT_SUPPORT_VULKAN),true)
