@@ -75,6 +75,12 @@ $(MODULE_KP_TARGET): $(LOCAL_ADDITIONAL_DEPENDENCIES)
 # well as all the other intermediate files, are removed during a clean.
 $(cleantarget): PRIVATE_CLEAN_FILES := $(PRIVATE_CLEAN_FILES) $(MODULE_KP_OUT_DIR)
 
+$(MODULE_KP_COMBINED_TARGET): $(LOCAL_ADDITIONAL_DEPENDENCIES)
+$(MODULE_KP_COMBINED_TARGET): $(foreach file,$(LOCAL_SRC_FILES), \
+						$(or $(wildcard $(local_path)/$(file)), \
+						  $(wildcard $(file)), \
+						  $(error File: $(file) doesn't exist)))
+
 # Since this file will be included more than once for directories
 # with more than one kernel module, the shared KBUILD_TARGET rule should
 # only be defined once to avoid "overriding commands ..." warnings.
@@ -90,7 +96,7 @@ $(MODULE_KP_COMBINED_TARGET)_RULE := 1
 $(MODULE_KP_COMBINED_TARGET): local_path     := $(LOCAL_PATH)
 $(MODULE_KP_COMBINED_TARGET): local_out      := $(MODULE_KP_OUT_DIR)
 $(MODULE_KP_COMBINED_TARGET): kbuild_options := $(KBUILD_OPTIONS)
-$(MODULE_KP_COMBINED_TARGET): $(LOCAL_ADDITIONAL_DEPENDENCIES) $(LOCAL_SRC_FILES)
+$(MODULE_KP_COMBINED_TARGET):
 	(cd $(KERNEL_PLATFORM_PATH) && \
 	    EXT_MODULES=la/$(local_path) \
 	    MODULE_OUT=$(KERNEL_PLATFORM_TO_ROOT)$(local_out) \
