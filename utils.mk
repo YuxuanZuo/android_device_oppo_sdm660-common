@@ -182,6 +182,28 @@ $(strip \
 )
 endef
 
+# Check for java compile in vendor build
+define check_vendor_java_compile
+$(if $(filter true,\
+$(LOCAL_ODM_MODULE) \
+$(LOCAL_OEM_MODULE) \
+$(LOCAL_PROPRIETARY_MODULE) \
+$(LOCAL_VENDOR_MODULE)), \
+$(if $(filter true, $(LOCAL_IS_RUNTIME_RESOURCE_OVERLAY)),, \
+$(if $(strip $(LOCAL_SRC_FILES)),\
+$(if $(filter enforcing,$(CLEAN_UP_JAVA_IN_VENDOR)), $(error Module \
+$(LOCAL_MODULE) in $(LOCAL_PATH) hit the violation because it compile the \
+java in vendor. Only prebuilt for Java Apk and Jar is allowed in vendor. \
+for detail instruction, pls refer to go/JavaCleanUpInVendor),\
+$(if $(filter warning,$(CLEAN_UP_JAVA_IN_VENDOR)), \
+$(shell mkdir -p $(PRODUCT_OUT)/configs; echo Module \
+$(LOCAL_MODULE) in $(LOCAL_PATH) hit the violation because \
+it compile the java in vendor. Only prebuilt for Java Apk and Jar is allowed \
+in vendor. for detail instruction, pls refer to \
+go/JavaCleanUpInVendor >> \
+$(PRODUCT_OUT)/configs/vendor_java_make_violator.txt ))))))
+endef
+
 # $(call is-android-codename-in-list,cnlist)
 # cnlist is combination/list of android codenames
 define is-android-codename-in-list
