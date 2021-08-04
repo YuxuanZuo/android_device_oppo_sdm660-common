@@ -22,6 +22,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.backup.ntpServer=0.pool.ntp.org \
     sys.vendor.shutdown.waittime=500
 
+RELAX_USES_LIBRARY_CHECK=true
 
 ifneq ($(TARGET_BOARD_AUTO), true)
 PRODUCT_PROPERTY_OVERRIDES += \
