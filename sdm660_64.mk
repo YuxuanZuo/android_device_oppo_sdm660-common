@@ -481,6 +481,17 @@ endif
 
 PRODUCT_PACKAGES += libnbaio
 
+# QRTR related packages
+PRODUCT_PACKAGES += qrtr-ns
+PRODUCT_PACKAGES += qrtr-lookup
+PRODUCT_PACKAGES += libqrtr
+
+# Securemsm packages
+PRODUCT_PACKAGES += android.hardware.keymaster@3.0.vendor
+PRODUCT_PACKAGES += android.hardware.keymaster@4.0.vendor
+PRODUCT_PACKAGES += android.hardware.keymaster@4.1.vendor
+PRODUCT_PACKAGES += android.hardware.gatekeeper@1.0.vendor
+
 # Target specific Netflix custom property
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.netflix.bsp_rev=Q660-13149-1
