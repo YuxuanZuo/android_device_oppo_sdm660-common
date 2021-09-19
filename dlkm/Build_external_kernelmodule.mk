@@ -40,17 +40,15 @@ include $(BUILD_SYSTEM)/base_rules.mk
 
 ################################################################################
 KERNEL_PLATFORM_PATH:=kernel_platform
-KERNEL_PLATFORM_OUT_DIR:=$(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ
+KERNEL_PLATFORM_TO_ROOT:=../
 
-ifeq ($(wildcard $(KERNEL_PLATFORM_OUT_DIR)/),)
-$(error "$(KERNEL_PLATFORM_OUT_DIR) doesn't exist. Have you run kernel_platform/build/android/prepare.sh?")
-endif
 ################################################################################
+KP_DLKM_INTERMEDIATE:=$(TARGET_OUT_INTERMEDIATES)/DLKM_OBJ
 # Intermediate directory where the kernel modules are created
 # by the kernel platform. Ideally this would be the same
 # directory as LOCAL_BUILT_MODULE, but because we're using
 # relative paths for both O= and M=, we don't have much choice
-MODULE_KP_OUT_DIR := $(KERNEL_PLATFORM_OUT_DIR)/$(LOCAL_PATH)
+MODULE_KP_OUT_DIR := $(KP_DLKM_INTERMEDIATE)/$(LOCAL_PATH)
 
 # The kernel build system doesn't support parallel kernel module builds
 # that share the same output directory. Thus, in order to build multiple
@@ -77,6 +75,62 @@ $(MODULE_KP_TARGET): $(LOCAL_ADDITIONAL_DEPENDENCIES)
 # well as all the other intermediate files, are removed during a clean.
 $(cleantarget): PRIVATE_CLEAN_FILES := $(PRIVATE_CLEAN_FILES) $(MODULE_KP_OUT_DIR)
 
+$(MODULE_KP_COMBINED_TARGET): $(LOCAL_ADDITIONAL_DEPENDENCIES)
+$(MODULE_KP_COMBINED_TARGET): $(foreach file,$(LOCAL_SRC_FILES), \
+						$(or $(wildcard $(local_path)/$(file)), \
+						  $(wildcard $(file)), \
+						  $(error File: $(file) doesn't exist)))
+KERNEL_PREBUILT_DIR ?= device/qcom/$(TARGET_BOARD_PLATFORM)-kernel
+
+# Use $(wildcard $(KERNEL_PREBUILT_DIR)/.config) as an indicator of KERNEL_KIT support
+# KERNEL_KIT support removes the requirement on a full prebuilt kernel platform output tree,
+# instead just the prebuilt kernel platform DIST_DIR. The DIST_DIR is copied to
+# device/qcom/*-kernel by prepare_vendor.sh.
+ifneq ($(wildcard $(KERNEL_PREBUILT_DIR)/.config),)
+
+# We need to run make modules_prepare before compiling out-of-tree modules
+# As with other Kbuild commands, there should only be one build command running modules_prepare,
+# so guard it with obj/DLKM_OBJ/build.timestamp file
+MODULE_KP_COMMON_TARGET := $(KP_DLKM_INTERMEDIATE)/build.timestamp
+ifndef $(MODULE_KP_COMMON_TARGET)_RULE
+$(MODULE_KP_COMMON_TARGET)_RULE := 1
+
+$(MODULE_KP_COMMON_TARGET): $(KERNEL_PREBUILT_DIR)/.config $(KERNEL_PREBUILT_DIR)/Module.symvers
+	(cd $(KERNEL_PLATFORM_PATH) && \
+	    OUT_DIR=$(KERNEL_PLATFORM_TO_ROOT)/$(KP_DLKM_INTERMEDIATE)/kernel_platform \
+	    KERNEL_KIT=$(KERNEL_PLATFORM_TO_ROOT)/$(KERNEL_PREBUILT_DIR) \
+	    ./build/build_module.sh $(kbuild_options) \
+	    ANDROID_BUILD_TOP=$$(realpath $$(pwd)/$(KERNEL_PLATFORM_TO_ROOT)) \
+	)
+	touch $@
+endif
+
+ifndef $(MODULE_KP_COMBINED_TARGET)_RULE
+$(MODULE_KP_COMBINED_TARGET)_RULE := 1
+
+# Kernel modules have to be built after:
+#  * the kernel config has been created
+#  * host executables, like scripts/basic/fixdep, have been built
+#    (otherwise parallel invocations of the kernel build system will
+#    fail as they all try to compile these executables at the same time)
+#  * Module.symvers is available (prebuilt or after full kernel build)
+$(MODULE_KP_COMBINED_TARGET): local_path     := $(LOCAL_PATH)
+$(MODULE_KP_COMBINED_TARGET): local_out      := $(MODULE_KP_OUT_DIR)
+$(MODULE_KP_COMBINED_TARGET): kbuild_options := $(KBUILD_OPTIONS)
+$(MODULE_KP_COMBINED_TARGET): $(MODULE_KP_COMMON_TARGET)
+	(cd $(KERNEL_PLATFORM_PATH) && \
+	    EXT_MODULES=$(KERNEL_PLATFORM_TO_ROOT)/$(local_path) \
+	    OUT_DIR=$(KERNEL_PLATFORM_TO_ROOT)/$(KP_DLKM_INTERMEDIATE)/kernel_platform \
+	    KERNEL_KIT=$(KERNEL_PLATFORM_TO_ROOT)/$(KERNEL_PREBUILT_DIR) \
+	    ./build/build_module.sh $(kbuild_options) \
+	    ANDROID_BUILD_TOP=$$(realpath $$(pwd)/$(KERNEL_PLATFORM_TO_ROOT)) \
+	)
+	touch $@
+
+endif
+
+else # Use old full prebuilt kernel platform method
+
 # Since this file will be included more than once for directories
 # with more than one kernel module, the shared KBUILD_TARGET rule should
 # only be defined once to avoid "overriding commands ..." warnings.
@@ -90,21 +144,18 @@ $(MODULE_KP_COMBINED_TARGET)_RULE := 1
 #    fail as they all try to compile these executables at the same time)
 #  * a full kernel build (to make module versioning work)
 $(MODULE_KP_COMBINED_TARGET): local_path     := $(LOCAL_PATH)
+$(MODULE_KP_COMBINED_TARGET): local_out      := $(MODULE_KP_OUT_DIR)
 $(MODULE_KP_COMBINED_TARGET): kbuild_options := $(KBUILD_OPTIONS)
-$(MODULE_KP_COMBINED_TARGET): $(LOCAL_ADDITIONAL_DEPENDENCIES) $(LOCAL_SRC_FILES)
-	# Create a symlink so that Kernel Platform thinks module source lives inside
-	# kernel platform directory structure.
-	# this makes finding the output much less confusing and helps prevent
-	# possibility of conflicting output folders if we were to use relative path
-	# outside the kernel_platform directory structure. Kbuild output goes to:
-	# $(KERNEL_PLATFORM_OUT_DIR)/$(MODULE_KP_SYMLINK)/$(LOCAL_PATH)
+$(MODULE_KP_COMBINED_TARGET):
 	(cd $(KERNEL_PLATFORM_PATH) && \
 	    EXT_MODULES=la/$(local_path) \
+	    MODULE_OUT=$(KERNEL_PLATFORM_TO_ROOT)$(local_out) \
 	    ./build/build_module.sh $(kbuild_options) \
 	    ANDROID_BUILD_TOP=$$(realpath $$(pwd)/$(KERNEL_PLATFORM_TO_ROOT)) \
 	)
 	touch $@
 
+endif
 endif
 endif
 

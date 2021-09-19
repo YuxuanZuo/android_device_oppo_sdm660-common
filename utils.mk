@@ -97,12 +97,6 @@ define is-board-platform-in-list
 $(call match-word-in-list,$(TARGET_BOARD_PLATFORM),$(1))
 endef
 
-# $(call is-product-in-list,tpl)
-# # returns true or empty
-define is-product-in-list
-$(call match-word-in-list,$(TARGET_PRODUCT),$(1))
-endef
-
 # $(call is-vendor-board-platform,vendor)
 # returns true or empty
 define is-vendor-board-platform
@@ -180,6 +174,34 @@ $(strip \
     true, \
   ) \
 )
+endef
+
+# Check for java compile in vendor build
+define check_vendor_java_compile
+$(if $(filter true,\
+$(LOCAL_ODM_MODULE) \
+$(LOCAL_OEM_MODULE) \
+$(LOCAL_PROPRIETARY_MODULE) \
+$(LOCAL_VENDOR_MODULE)), \
+$(if $(filter true, $(LOCAL_IS_RUNTIME_RESOURCE_OVERLAY)),, \
+$(if $(strip $(LOCAL_SRC_FILES)),\
+$(if $(filter enforcing,$(CLEAN_UP_JAVA_IN_VENDOR)), \
+$(if $(filter $(LOCAL_MODULE), $(JAVA_IN_VENDOR_MAKE_WHITE_LIST)), \
+$(shell mkdir -p $(PRODUCT_OUT)/configs; echo Module $(LOCAL_MODULE) \
+in $(LOCAL_PATH) hit the violation because it compile the java in vendor. \
+Only prebuilt for Java Apk and Jar is allowed in vendor. \
+for detail instruction, pls refer to go/JavaCleanUpInVendor >> \
+$(PRODUCT_OUT)/configs/vendor_java_make_violator.txt ) ,\
+$(error Module $(LOCAL_MODULE) in $(LOCAL_PATH) hit the violation because \
+it compile the java in vendor. Only prebuilt for Java Apk and Jar is allowed \
+in vendor. for detail instruction, pls refer to go/JavaCleanUpInVendor) ),\
+$(if $(filter warning,$(CLEAN_UP_JAVA_IN_VENDOR)), \
+$(shell mkdir -p $(PRODUCT_OUT)/configs; echo Module \
+$(LOCAL_MODULE) in $(LOCAL_PATH) hit the violation because \
+it compile the java in vendor. Only prebuilt for Java Apk and Jar is allowed \
+in vendor. for detail instruction, pls refer to \
+go/JavaCleanUpInVendor >> \
+$(PRODUCT_OUT)/configs/vendor_java_make_violator.txt ))))))
 endef
 
 # $(call is-android-codename-in-list,cnlist)
