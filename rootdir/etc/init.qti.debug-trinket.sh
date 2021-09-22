@@ -1,5 +1,5 @@
 #!/vendor/bin/sh
-# Copyright (c) 2019, 2021, The Linux Foundation. All rights reserved.
+# Copyright (c) 2019, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -29,40 +29,40 @@
 enable_trinket_tracing_events()
 {
     # timer
-    echo 1 > /sys/kernel/tracing/events/timer/timer_expire_entry/enable
-    echo 1 > /sys/kernel/tracing/events/timer/timer_expire_exit/enable
-    echo 1 > /sys/kernel/tracing/events/timer/hrtimer_cancel/enable
-    echo 1 > /sys/kernel/tracing/events/timer/hrtimer_expire_entry/enable
-    echo 1 > /sys/kernel/tracing/events/timer/hrtimer_expire_exit/enable
-    echo 1 > /sys/kernel/tracing/events/timer/hrtimer_init/enable
-    echo 1 > /sys/kernel/tracing/events/timer/hrtimer_start/enable
+    echo 1 > /sys/kernel/debug/tracing/events/timer/timer_expire_entry/enable
+    echo 1 > /sys/kernel/debug/tracing/events/timer/timer_expire_exit/enable
+    echo 1 > /sys/kernel/debug/tracing/events/timer/hrtimer_cancel/enable
+    echo 1 > /sys/kernel/debug/tracing/events/timer/hrtimer_expire_entry/enable
+    echo 1 > /sys/kernel/debug/tracing/events/timer/hrtimer_expire_exit/enable
+    echo 1 > /sys/kernel/debug/tracing/events/timer/hrtimer_init/enable
+    echo 1 > /sys/kernel/debug/tracing/events/timer/hrtimer_start/enable
     #enble FTRACE for softirq events
-    echo 1 > /sys/kernel/tracing/events/irq/enable
+    echo 1 > /sys/kernel/debug/tracing/events/irq/enable
     #enble FTRACE for Workqueue events
-    echo 1 > /sys/kernel/tracing/events/workqueue/enable
+    echo 1 > /sys/kernel/debug/tracing/events/workqueue/enable
     # schedular
-    echo 1 > /sys/kernel/tracing/events/sched/sched_migrate_task/enable
-    echo 1 > /sys/kernel/tracing/events/sched/sched_pi_setprio/enable
-    echo 1 > /sys/kernel/tracing/events/sched/sched_switch/enable
-    echo 1 > /sys/kernel/tracing/events/sched/sched_wakeup/enable
-    echo 1 > /sys/kernel/tracing/events/sched/sched_wakeup_new/enable
-    echo 1 > /sys/kernel/tracing/events/sched/sched_isolate/enable
+    echo 1 > /sys/kernel/debug/tracing/events/sched/sched_migrate_task/enable
+    echo 1 > /sys/kernel/debug/tracing/events/sched/sched_pi_setprio/enable
+    echo 1 > /sys/kernel/debug/tracing/events/sched/sched_switch/enable
+    echo 1 > /sys/kernel/debug/tracing/events/sched/sched_wakeup/enable
+    echo 1 > /sys/kernel/debug/tracing/events/sched/sched_wakeup_new/enable
+    echo 1 > /sys/kernel/debug/tracing/events/sched/sched_isolate/enable
     #cpu frequency
-    echo 1 > /sys/kernel/tracing/events/power/cpu_frequency/enable
+    echo 1 > /sys/kernel/debug/tracing/events/power/cpu_frequency/enable
     # clock
-    echo 1 > /sys/kernel/tracing/events/power/clock_set_rate/enable
-    echo 1 > /sys/kernel/tracing/events/power/clock_enable/enable
-    echo 1 > /sys/kernel/tracing/events/power/clock_disable/enable
-    echo 1 > /sys/kernel/tracing/events/power/cpu_frequency/enable
+    echo 1 > /sys/kernel/debug/tracing/events/power/clock_set_rate/enable
+    echo 1 > /sys/kernel/debug/tracing/events/power/clock_enable/enable
+    echo 1 > /sys/kernel/debug/tracing/events/power/clock_disable/enable
+    echo 1 > /sys/kernel/debug/tracing/events/power/cpu_frequency/enable
     # regulator
-    echo 1 > /sys/kernel/tracing/events/regulator/enable
+    echo 1 > /sys/kernel/debug/tracing/events/regulator/enable
     # power
-    echo 1 > /sys/kernel/tracing/events/msm_low_power/enable
+    echo 1 > /sys/kernel/debug/tracing/events/msm_low_power/enable
     #SCM Tracing enabling
-    echo 1 > /sys/kernel/tracing/events/scm/enable
-    echo 1 > /sys/kernel/tracing/events/msm_cam/enable
+    echo 1 > /sys/kernel/debug/tracing/events/scm/enable
+    echo 1 > /sys/kernel/debug/tracing/events/msm_cam/enable
 
-    echo 1 > /sys/kernel/tracing/tracing_on
+    echo 1 > /sys/kernel/debug/tracing/tracing_on
 }
 
 # function to enable ftrace events
@@ -75,11 +75,11 @@ enable_trinket_ftrace_event_tracing()
     fi
 
     # bail out if ftrace events aren't present
-    if [ ! -d /sys/kernel/tracing/events ]
+    if [ ! -d /sys/kernel/debug/tracing/events ]
     then
         return
     fi
-    echo 0x4096 > /sys/kernel/tracing/buffer_size_kb
+    echo 0x4096 > /sys/kernel/debug/tracing/buffer_size_kb
     enable_trinket_tracing_events
 }
 
@@ -97,7 +97,7 @@ enable_trinket_stm_events()
         return
     fi
     # bail out if ftrace events aren't present
-    if [ ! -d /sys/kernel/tracing/events ]
+    if [ ! -d /sys/kernel/debug/tracing/events ]
     then
         return
     fi
@@ -106,7 +106,7 @@ enable_trinket_stm_events()
     echo sg > /sys/bus/coresight/devices/coresight-tmc-etr/mem_type
     echo 1 > /sys/bus/coresight/devices/coresight-tmc-etr/$sinkenable
     echo 1 > /sys/bus/coresight/devices/coresight-stm/$srcenable
-    echo 1 > /sys/kernel/tracing/tracing_on
+    echo 1 > /sys/kernel/debug/tracing/tracing_on
     echo 0 > /sys/bus/coresight/devices/coresight-stm/hwevent_enable
     enable_trinket_tracing_events
 }

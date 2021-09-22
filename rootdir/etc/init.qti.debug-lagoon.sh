@@ -1,6 +1,6 @@
 #!/vendor/bin/sh
 
-#Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
+#Copyright (c) 2020, The Linux Foundation. All rights reserved.
 #
 #Redistribution and use in source and binary forms, with or without
 #modification, are permitted provided that the following conditions are met:
@@ -29,44 +29,44 @@
 enable_tracing_events_lagoon()
 {
     # timer
-    echo 1 > /sys/kernel/tracing/events/timer/timer_expire_entry/enable
-    echo 1 > /sys/kernel/tracing/events/timer/timer_expire_exit/enable
-    #echo 1 > /sys/kernel/tracing/events/timer/hrtimer_cancel/enable
-    echo 1 > /sys/kernel/tracing/events/timer/hrtimer_expire_entry/enable
-    echo 1 > /sys/kernel/tracing/events/timer/hrtimer_expire_exit/enable
-    #echo 1 > /sys/kernel/tracing/events/timer/hrtimer_init/enable
-    #echo 1 > /sys/kernel/tracing/events/timer/hrtimer_start/enable
+    echo 1 > /sys/kernel/debug/tracing/events/timer/timer_expire_entry/enable
+    echo 1 > /sys/kernel/debug/tracing/events/timer/timer_expire_exit/enable
+    #echo 1 > /sys/kernel/debug/tracing/events/timer/hrtimer_cancel/enable
+    echo 1 > /sys/kernel/debug/tracing/events/timer/hrtimer_expire_entry/enable
+    echo 1 > /sys/kernel/debug/tracing/events/timer/hrtimer_expire_exit/enable
+    #echo 1 > /sys/kernel/debug/tracing/events/timer/hrtimer_init/enable
+    #echo 1 > /sys/kernel/debug/tracing/events/timer/hrtimer_start/enable
     #enble FTRACE for softirq events
-    echo 1 > /sys/kernel/tracing/events/irq/enable
+    echo 1 > /sys/kernel/debug/tracing/events/irq/enable
     #enble FTRACE for Workqueue events
-    echo 1 > /sys/kernel/tracing/events/workqueue/enable
+    echo 1 > /sys/kernel/debug/tracing/events/workqueue/enable
     # schedular
-    echo 1 > /sys/kernel/tracing/events/sched/sched_cpu_hotplug/enable
-    echo 1 > /sys/kernel/tracing/events/sched/sched_migrate_task/enable
-    echo 1 > /sys/kernel/tracing/events/sched/sched_pi_setprio/enable
-    echo 1 > /sys/kernel/tracing/events/sched/sched_switch/enable
-    echo 1 > /sys/kernel/tracing/events/sched/sched_wakeup/enable
-    echo 1 > /sys/kernel/tracing/events/sched/sched_wakeup_new/enable
-    echo 1 > /sys/kernel/tracing/events/sched/sched_isolate/enable
+    echo 1 > /sys/kernel/debug/tracing/events/sched/sched_cpu_hotplug/enable
+    echo 1 > /sys/kernel/debug/tracing/events/sched/sched_migrate_task/enable
+    echo 1 > /sys/kernel/debug/tracing/events/sched/sched_pi_setprio/enable
+    echo 1 > /sys/kernel/debug/tracing/events/sched/sched_switch/enable
+    echo 1 > /sys/kernel/debug/tracing/events/sched/sched_wakeup/enable
+    echo 1 > /sys/kernel/debug/tracing/events/sched/sched_wakeup_new/enable
+    echo 1 > /sys/kernel/debug/tracing/events/sched/sched_isolate/enable
     # video
-    echo 1 > /sys/kernel/tracing/events/msm_vidc_events/enable
+    echo 1 > /sys/kernel/debug/tracing/events/msm_vidc_events/enable
     # clock
-    echo 1 > /sys/kernel/tracing/events/power/clock_set_rate/enable
-    echo 1 > /sys/kernel/tracing/events/power/clock_enable/enable
-    echo 1 > /sys/kernel/tracing/events/power/clock_disable/enable
-    echo 1 > /sys/kernel/tracing/events/power/cpu_frequency/enable
+    echo 1 > /sys/kernel/debug/tracing/events/power/clock_set_rate/enable
+    echo 1 > /sys/kernel/debug/tracing/events/power/clock_enable/enable
+    echo 1 > /sys/kernel/debug/tracing/events/power/clock_disable/enable
+    echo 1 > /sys/kernel/debug/tracing/events/power/cpu_frequency/enable
     # regulator
-    echo 1 > /sys/kernel/tracing/events/regulator/enable
+    echo 1 > /sys/kernel/debug/tracing/events/regulator/enable
     # power
-    #echo 1 > /sys/kernel/tracing/events/msm_low_power/enable
-    echo 1 > /sys/kernel/tracing/events/msm_low_power/cpu_idle_enter/enable
-    echo 1 > /sys/kernel/tracing/events/msm_low_power/cpu_idle_exit/enable
+    #echo 1 > /sys/kernel/debug/tracing/events/msm_low_power/enable
+    echo 1 > /sys/kernel/debug/tracing/events/msm_low_power/cpu_idle_enter/enable
+    echo 1 > /sys/kernel/debug/tracing/events/msm_low_power/cpu_idle_exit/enable
     #thermal
-    echo 1 > /sys/kernel/tracing/events/thermal/enable
+    echo 1 > /sys/kernel/debug/tracing/events/thermal/enable
     #scm
-    echo 1 > /sys/kernel/tracing/events/scm/enable
+    echo 1 > /sys/kernel/debug/tracing/events/scm/enable
     #rmph_send_msg
-    echo 1 > /sys/kernel/tracing/events/rpmh/rpmh_send_msg/enable
+    echo 1 > /sys/kernel/debug/tracing/events/rpmh/rpmh_send_msg/enable
 
     #enable aop with timestamps
     # echo 33 0x680000 > /sys/bus/coresight/devices/coresight-tpdm-swao-0/cmb_msr
@@ -79,21 +79,21 @@ enable_tracing_events_lagoon()
     # echo 4 2 > /sys/bus/coresight/devices/coresight-cti-swao_cti0/map_trigout
 
     #memory pressure events/oom
-    echo 1 > /sys/kernel/tracing/events/psi/psi_event/enable
-    echo 1 > /sys/kernel/tracing/events/psi/psi_window_vmstat/enable
+    echo 1 > /sys/kernel/debug/tracing/events/psi/psi_event/enable
+    echo 1 > /sys/kernel/debug/tracing/events/psi/psi_window_vmstat/enable
 
     #iommu events
-    echo 1 > /sys/kernel/tracing/events/iommu/map/enable
-    echo 1 > /sys/kernel/tracing/events/iommu/map_sg/enable
-    echo 1 > /sys/kernel/tracing/events/iommu/unmap/enable
+    echo 1 > /sys/kernel/debug/tracing/events/iommu/map/enable
+    echo 1 > /sys/kernel/debug/tracing/events/iommu/map_sg/enable
+    echo 1 > /sys/kernel/debug/tracing/events/iommu/unmap/enable
 
     #enable preemption and irq off traces 500 ms for preemption and 100 ms for irq off
     echo 500000000 > /proc/sys/kernel/preemptoff_tracing_threshold_ns
-    echo 1 > /sys/kernel/tracing/events/sched/sched_preempt_disable/enable
+    echo 1 > /sys/kernel/debug/tracing/events/sched/sched_preempt_disable/enable
     echo 100000000 > /proc/sys/kernel/irqsoff_tracing_threshold_ns
-    echo 1 > /sys/kernel/tracing/events/preemptirq/irqs_disable/enable
+    echo 1 > /sys/kernel/debug/tracing/events/preemptirq/irqs_disable/enable
 
-    echo 1 > /sys/kernel/tracing/tracing_on
+    echo 1 > /sys/kernel/debug/tracing/tracing_on
 }
 
 # function to enable ftrace events
@@ -106,7 +106,7 @@ enable_ftrace_event_tracing_lagoon()
     fi
 
     # bail out if ftrace events aren't present
-    if [ ! -d /sys/kernel/tracing/events ]
+    if [ ! -d /sys/kernel/debug/tracing/events ]
     then
         return
     fi
@@ -128,7 +128,7 @@ enable_stm_events_lagoon()
         return
     fi
     # bail out if ftrace events aren't present
-    if [ ! -d /sys/kernel/tracing/events ]
+    if [ ! -d /sys/kernel/debug/tracing/events ]
     then
         return
     fi
@@ -136,7 +136,7 @@ enable_stm_events_lagoon()
     echo $etr_size > /sys/bus/coresight/devices/coresight-tmc-etr/buffer_size
     echo 1 > /sys/bus/coresight/devices/coresight-tmc-etr/$sinkenable
     echo 1 > /sys/bus/coresight/devices/coresight-stm/$srcenable
-    echo 1 > /sys/kernel/tracing/tracing_on
+    echo 1 > /sys/kernel/debug/tracing/tracing_on
     echo 0 > /sys/bus/coresight/devices/coresight-stm/hwevent_enable
     enable_tracing_events_lagoon
 }
