@@ -479,6 +479,9 @@ ifeq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION),4.14 4.19))
 PRODUCT_PACKAGES += init.qti.dcvs.sh
 endif
 
+PRODUCT_PROPERTY_OVERRIDES += ro.soc.manufacturer=QTI
+PRODUCT_PROPERTY_OVERRIDES += ro.soc.model=SDM660
+
 PRODUCT_PACKAGES += libnbaio
 
 # Target specific Netflix custom property
