@@ -171,6 +171,8 @@ endif #TARGET_ENABLE_QC_AV_ENHANCEMENTS
 
 PRODUCT_PROPERTY_OVERRIDES += persist.vendor.camera.dual.isp.sync=0
 
+PRODUCT_PROPERTY_OVERRIDES += persist.vendor.usb.config=diag,serial_cdev,rmnet,adb
+
 # video seccomp policy files
 PRODUCT_COPY_FILES += \
     device/qcom/sdm660_64/seccomp/mediacodec-seccomp.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediacodec.policy \
