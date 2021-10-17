@@ -15,7 +15,7 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/omni_R11.mk \
+    $(LOCAL_DIR)/twrp_R11.mk \
 
 COMMON_LUNCH_CHOICES := \
-    omni_R11-userdebug
+    twrp_R11-userdebug

@@ -19,10 +19,10 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base_telephony.mk)
 
 $(call inherit-product, device/oppo/R11/device.mk)
-$(call inherit-product, vendor/omni/config/common.mk)
+$(call inherit-product, vendor/twrp/config/common.mk)
 
 PRODUCT_MANUFACTURER := OPPO
-PRODUCT_NAME := omni_R11
+PRODUCT_NAME := twrp_R11
 PRODUCT_DEVICE := R11
 PRODUCT_BRAND := OPPO
 PRODUCT_MODEL := OPPO R11
