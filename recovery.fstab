@@ -60,7 +60,6 @@
 /dev/block/bootdevice/by-name/apdp         /apdp           emmc    defaults                                                        defaults
 /dev/block/bootdevice/by-name/devinfo      /devinfo        emmc    defaults                                                        defaults
 /dev/block/bootdevice/by-name/persist      /persist        ext4    defaults                                                        defaults
-/dev/block/bootdevice/by-name/opporeserve2 /opporeserve    ext4    rw,seclabel,nosuid,nodev,noatime,data=ordered                   wait
 /dev/block/bootdevice/by-name/abl          /abl            emmc    defaults                                                        defaults
 /dev/block/bootdevice/by-name/ablbak       /ablbak         emmc    defaults                                                        defaults
 /dev/block/bootdevice/by-name/xbl          /xbl            emmc    defaults                                                        defaults
