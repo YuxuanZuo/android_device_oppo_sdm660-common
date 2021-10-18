@@ -28,7 +28,6 @@ cc_binary {
             cflags: ["-DARCH_ARM_32"],
         },
     },
-    header_libs: ["qseecom-kernel-headers"],
     shared_libs: [
         "libbase",
         "libdl",
