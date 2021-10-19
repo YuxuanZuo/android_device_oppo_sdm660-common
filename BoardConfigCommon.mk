@@ -84,10 +84,7 @@ BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED := true
 
 # Recovery
 TARGET_RECOVERY_DEVICE_MODULES += \
-    ashmemd \
-    ashmemd_aidl_interface-cpp \
     libandroidicu \
-    libashmemd_client \
     libion \
     libxml2 \
     libpuresoftkeymasterdevice \
@@ -95,12 +92,9 @@ TARGET_RECOVERY_DEVICE_MODULES += \
     vendor.qti.hardware.cryptfshw@1.0-service-qti.qsee
 
 TW_RECOVERY_ADDITIONAL_RELINK_BINARY_FILES += \
-    $(TARGET_OUT_EXECUTABLES)/ashmemd \
     $(TARGET_OUT_VENDOR_EXECUTABLES)/vendor.qti.hardware.cryptfshw@1.0-service-qti.qsee
 
 TW_RECOVERY_ADDITIONAL_RELINK_LIBRARY_FILES += \
-    $(TARGET_OUT_SHARED_LIBRARIES)/ashmemd_aidl_interface-cpp.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libashmemd_client.so \
     $(TARGET_OUT_SHARED_LIBRARIES)/libion.so \
     $(TARGET_OUT_SHARED_LIBRARIES)/libxml2.so \
     $(TARGET_OUT_SHARED_LIBRARIES)/libpuresoftkeymasterdevice.so \
