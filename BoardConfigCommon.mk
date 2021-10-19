@@ -107,7 +107,6 @@ TW_RECOVERY_ADDITIONAL_RELINK_LIBRARY_FILES += \
     $(TARGET_OUT_VENDOR_SHARED_LIBRARIES)/libkeymaster3device.so
 
 TARGET_RECOVERY_FSTAB := device/oppo/sdm660-common/recovery.fstab
-TW_FORCE_USE_BUSYBOX := true
 TW_EXTERNAL_STORAGE_PATH := /external_sd
 TW_EXTERNAL_STORAGE_MOUNT_POINT := external_sd
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /config/usb_gadget/g1/functions/mass_storage.0/lun.%d/file
