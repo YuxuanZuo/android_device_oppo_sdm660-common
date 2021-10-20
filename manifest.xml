@@ -286,7 +286,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <instance>slot2</instance>
         </interface>
     </hal>
-    <!--i <hal format="hidl">
+    <hal format="hidl">
         <name>com.qualcomm.qti.dpm.api</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
@@ -294,7 +294,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <name>IdpmQmi</name>
             <instance>dpmQmiService</instance>
         </interface>
-    </hal> -->
+    </hal>
 
     <hal format="hidl">
         <name>vendor.qti.imsrtpservice</name>
@@ -409,16 +409,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <instance>default</instance>
         </interface>
     </hal> -->
-    <!-- CapabilityConfigStore HAL Service  -->
-    <hal format="hidl">
-        <name>vendor.qti.hardware.capabilityconfigstore</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>ICapabilityConfigStore</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
     <!-- Alarm HAL service -->
     <hal format="hidl">
         <name>vendor.qti.hardware.alarm</name>
