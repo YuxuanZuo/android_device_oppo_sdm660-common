@@ -19,16 +19,16 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/base.mk)
 
 COMMON_PATH := device/oppo/sdm660-common
 
+# define hardware platform
+PRODUCT_PLATFORM := sdm660
+
+# Encryption
 PRODUCT_PACKAGES += \
     qcom_decrypt
 
-PRODUCT_COPY_FILES += \
-    $(OUT_DIR)/target/product/${PRODUCT_DEVICE}/obj/SHARED_LIBRARIES/libcryptfs_hw_intermediates/libcryptfs_hw.so:$(TARGET_COPY_OUT_RECOVERY)/root/system/lib64/libcryptfs_hw.so \
-    $(OUT_DIR)/target/product/${PRODUCT_DEVICE}/obj/SHARED_LIBRARIES/vendor.qti.hardware.cryptfshw@1.0_intermediates/vendor.qti.hardware.cryptfshw@1.0.so:$(TARGET_COPY_OUT_RECOVERY)/root/vendor/lib64/vendor.qti.hardware.cryptfshw@1.0.so
-
 # Apex libraries
 PRODUCT_COPY_FILES += \
-    $(OUT_DIR)/target/product/${PRODUCT_DEVICE}/obj/SHARED_LIBRARIES/libandroidicu_intermediates/libandroidicu.so:$(TARGET_COPY_OUT_RECOVERY)/root/system/lib64/libandroidicu.so
+    $(OUT_DIR)/target/product/$(PRODUCT_HARDWARE)/obj/SHARED_LIBRARIES/libandroidicu_intermediates/libandroidicu.so:$(TARGET_COPY_OUT_RECOVERY)/root/system/lib64/libandroidicu.so
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
