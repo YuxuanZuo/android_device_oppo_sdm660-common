@@ -6,6 +6,5 @@ service vendor.cryptfshw-1-0 /system/bin/vendor.qti.hardware.cryptfshw@1.0-servi
     user root
     group root
     disabled
-    oneshot
     writepid /dev/cpuset/system-background/tasks
     seclabel u:r:recovery:s0
