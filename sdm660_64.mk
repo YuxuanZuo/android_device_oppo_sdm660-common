@@ -488,6 +488,10 @@ PRODUCT_PACKAGES += libnbaio
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.netflix.bsp_rev=Q660-13149-1
 
+# Display prop to disable Idle time out
+PRODUCT_PROPERTY_OVERRIDES += \
+    vendor.display.idle_time=32767
+
 ###################################################################################
 # This is the End of target.mk file.
 # Now, Pickup other split product.mk files:
