@@ -28,6 +28,10 @@ else
     $(warning "Unknown kernel")
 endif
 
+# Set GRF/Vendor freeze properties
+BOARD_SHIPPING_API_LEVEL := 30
+BOARD_API_LEVEL := 30
+
 # Enable RRO for Android R
 ifeq ($(strip $(TARGET_KERNEL_VERSION)), 4.19)
     TARGET_USES_RRO := true
