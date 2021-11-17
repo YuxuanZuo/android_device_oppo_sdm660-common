@@ -1,5 +1,9 @@
 ALLOW_MISSING_DEPENDENCIES := true
 TARGET_USES_AOSP := true
+
+TARGET_BOARD_PLATFORM := sdm660
+TARGET_BOARD_SUFFIX := _64
+
 # Default vendor configuration.
 ifeq ($(ENABLE_VENDOR_IMAGE),)
 ENABLE_VENDOR_IMAGE := true
