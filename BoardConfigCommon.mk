@@ -105,6 +105,8 @@ TW_RECOVERY_ADDITIONAL_RELINK_LIBRARY_FILES += \
     $(TARGET_OUT_SYSTEM_EXT_SHARED_LIBRARIES)/libcryptfs_hw.so \
     $(TARGET_OUT_SYSTEM_EXT_SHARED_LIBRARIES)/vendor.qti.hardware.cryptfshw@1.0.so
 
+TW_INTERNAL_STORAGE_PATH := /data/media
+TW_INTERNAL_STORAGE_MOUNT_POINT := data
 TW_EXTERNAL_STORAGE_PATH := /external_sd
 TW_EXTERNAL_STORAGE_MOUNT_POINT := external_sd
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /config/usb_gadget/g1/functions/mass_storage.0/lun.%d/file
