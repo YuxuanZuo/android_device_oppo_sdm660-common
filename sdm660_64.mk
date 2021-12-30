@@ -238,6 +238,9 @@ PRODUCT_CHARACTERISTICS := nosdcard
 # Enable features in video HAL that can compile only on this platform
 TARGET_USES_MEDIA_EXTENSIONS := true
 
+# WLAN chipset
+WLAN_CHIPSET := qca_cld3
+
 #
 # system prop for opengles version
 #
@@ -288,6 +291,19 @@ PRODUCT_COPY_FILES += \
 # Exclude TOF sensor from InputManager
 PRODUCT_COPY_FILES += \
     device/qcom/sdm660_64/excluded-input-devices.xml:system/etc/excluded-input-devices.xml
+
+# WLAN host driver
+ifneq ($(WLAN_CHIPSET),)
+PRODUCT_PACKAGES += $(WLAN_CHIPSET)_wlan.ko
+endif
+
+# WLAN driver configuration file
+PRODUCT_COPY_FILES += \
+    device/qcom/sdm660_64/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/WCNSS_qcom_cfg.ini
+
+PRODUCT_PACKAGES += \
+    wpa_supplicant_overlay.conf \
+    p2p_supplicant_overlay.conf
 
 #audio related module
 PRODUCT_PACKAGES += \
@@ -399,6 +415,12 @@ PRODUCT_PACKAGES += \
 #      $(PRODUCT_PACKAGE_OVERLAYS)
 
 
+#for wlan
+PRODUCT_PACKAGES += \
+        wificond \
+        wifilogd \
+        wifilearner
+
 ifeq ($(ENABLE_AB), true)
 #A/B related packages
 PRODUCT_PACKAGES += update_engine \
@@ -455,6 +477,9 @@ SDM660_DISABLE_MODULE := true
 
 PRODUCT_COMPATIBLE_PROPERTY_OVERRIDE:=true
 
+# Enable STA + SAP Concurrency.
+WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
+
 # Enable vndk-sp Libraries
 PRODUCT_PACKAGES += vndk_package
 
@@ -463,11 +488,6 @@ TARGET_MOUNT_POINTS_SYMLINKS := false
 # Disable skip validate
 PRODUCT_PROPERTY_OVERRIDES += \
   vendor.display.disable_skip_validate=1
-
-#-------------------------------------------------------------------------------
-# wlan specific
-#-------------------------------------------------------------------------------
-include device/qcom/wlan/sdm660_64/wlan.mk
 
 # For bringup
 WLAN_BRINGUP_NEW_SP := true

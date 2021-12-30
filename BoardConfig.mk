@@ -347,13 +347,6 @@ BOARD_SYSTEMSDK_VERSIONS:=$(SHIPPING_API_LEVEL)
 BOARD_VNDK_VERSION := current
 
 
-#-------------------------------------------------------------------------------
-# wlan specific
-#-------------------------------------------------------------------------------
-ifeq ($(strip $(BOARD_HAS_QCOM_WLAN)),true)
-include device/qcom/wlan/sdm660_64/BoardConfigWlan.mk
-endif
-
 #################################################################################
 # This is the End of BoardConfig.mk file.
 # Now, Pickup other split Board.mk files:
