@@ -241,6 +241,9 @@ TARGET_USES_MEDIA_EXTENSIONS := true
 # WLAN chipset
 WLAN_CHIPSET := qca_cld3
 
+#WPA
+WPA := wpa_cli
+
 #
 # system prop for opengles version
 #
@@ -299,6 +302,9 @@ endif
 
 # WLAN driver configuration file
 PRODUCT_COPY_FILES += \
+	device/qcom/wlan/sdm660_64/icm.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/icm.conf \
+	frameworks/native/data/etc/android.hardware.wifi.rtt.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.rtt.xml \
+	frameworks/native/data/etc/android.hardware.wifi.passpoint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.passpoint.xml \
     device/qcom/sdm660_64/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/WCNSS_qcom_cfg.ini
 
 PRODUCT_PACKAGES += \
@@ -420,6 +426,7 @@ PRODUCT_PACKAGES += \
         wificond \
         wifilogd \
         wifilearner
+PRODUCT_PACKAGES += $(WPA)
 
 ifeq ($(ENABLE_AB), true)
 #A/B related packages
@@ -477,8 +484,14 @@ SDM660_DISABLE_MODULE := true
 
 PRODUCT_COMPATIBLE_PROPERTY_OVERRIDE:=true
 
+# WLAN specific aosp flag
+TARGET_USES_AOSP_FOR_WLAN := false
+
 # Enable STA + SAP Concurrency.
 WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
+
+# Enable SAP + SAP Feature.
+QC_WIFI_HIDL_FEATURE_DUAL_AP := true
 
 # Enable vndk-sp Libraries
 PRODUCT_PACKAGES += vndk_package
