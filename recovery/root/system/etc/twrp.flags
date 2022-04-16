@@ -1,7 +1,7 @@
 # mount point	fstype	device											device2				flags
-/system         ext4    /dev/block/bootdevice/by-name/system            flags=fsflags="ro,barrier=1";wipeingui
+/system         ext4    /dev/block/bootdevice/by-name/system            flags=wipeingui
 /system_image   emmc    /dev/block/bootdevice/by-name/system
-/vendor         ext4    /dev/block/bootdevice/by-name/vendor            flags=fsflags="ro,barrier=1";wipeingui
+/vendor         ext4    /dev/block/bootdevice/by-name/vendor            flags=wipeingui
 /vendor_image   emmc    /dev/block/bootdevice/by-name/vendor
 /external_sd    vfat    /dev/block/mmcblk1p1                            flags=fsflags="nosuid,nodev,utf8";storage;wipeingui;removable
 /usb-otg        auto    /dev/block/sdb1                                 /dev/block/sdb      flags=fsflags="nosuid,nodev,utf8";storage;wipeingui;removable
