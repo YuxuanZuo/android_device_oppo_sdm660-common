@@ -89,10 +89,7 @@ BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED := true
 TARGET_RECOVERY_DEVICE_MODULES += \
     libandroidicu \
     libion \
-    libxml2 \
-    libpuresoftkeymasterdevice \
-    libkeymaster3device \
-    vendor.qti.hardware.cryptfshw@1.0-service-qti.qsee
+    libxml2
 
 TW_RECOVERY_ADDITIONAL_RELINK_BINARY_FILES += \
     $(TARGET_OUT_VENDOR_EXECUTABLES)/hw/vendor.qti.hardware.cryptfshw@1.0-service-qti.qsee
@@ -100,8 +97,6 @@ TW_RECOVERY_ADDITIONAL_RELINK_BINARY_FILES += \
 TW_RECOVERY_ADDITIONAL_RELINK_LIBRARY_FILES += \
     $(TARGET_OUT_SHARED_LIBRARIES)/libion.so \
     $(TARGET_OUT_SHARED_LIBRARIES)/libxml2.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libpuresoftkeymasterdevice.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster3device.so \
     $(TARGET_OUT_SYSTEM_EXT_SHARED_LIBRARIES)/libcryptfs_hw.so \
     $(TARGET_OUT_SYSTEM_EXT_SHARED_LIBRARIES)/vendor.qti.hardware.cryptfshw@1.0.so
 
